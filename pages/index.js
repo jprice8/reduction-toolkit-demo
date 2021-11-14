@@ -1,82 +1,60 @@
-import Head from 'next/head'
+import Link from "next/link"
+
+import NavBar from "../shared/components/NavBar"
+import Footer from "../shared/components/Footer"
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <NavBar>
+     <div className="max-w-3xl mx-auto flex flex-col h-full justify-between">
+        <div className="mt-20 bg-white p-10 shadow-md rounded-md space-y-4">
+          <h2 className="text-center text-3xl text-gray-900 font-bold">
+            Welcome!
+          </h2>
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
+          <p>
+            The web app you are using is a demonstration of a tool that was
+            built for a health system&apos;s supply chain team in 2021. This
+            demo app was built to serve as a point of reference and to help
+            visualize and explain how this process works.
+            <span className="font-semibold pl-1">
+              The data that is used within this app has been randomly generated
+              and contains no sensitive or proprietary information.
+            </span>
+          </p>
 
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
+          <h4 className="text-xl font-semibold">Background</h4>
 
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
+          <p>
+            The scenario that this demo app portrays is the following. You are a
+            supply chain director for a local hospital. Every week on Sunday
+            night, the backend of the production tool generates a list of five
+            items that the system's algorithm has deemed to be held in excess of
+            what your historical demand has shown. You find an email in your
+            inbox telling you that there are five new items for you to review
+            and reset. You then follow the link on the email to this site where
+            you can start resetting your inventory levels on the
+            &quot;Reset&quot; tab.
+          </p>
 
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
+          <h4 className="text-xl font-semibold">Specs</h4>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
+          <p>
+            The version of this app that is in production uses a backend API
+            that is written in Python using the Django Rest Framework. Data is
+            saved using a PostgreSQL cluster which is managed by AWS. The
+            frontend client is very similiar to the demo app you are using right
+            now. It is a Single Page Application using the React library with
+            state management using Redux. To help simplify the demo app, it is
+            disconnected from a backend and is maintaining all data within the
+            client using Redux. Simply refresh the browser to start over.
+          </p>
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
         </div>
-      </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
-    </div>
+        <div>
+          <Footer />
+        </div>
+      </div>
+    </NavBar>
   )
 }
