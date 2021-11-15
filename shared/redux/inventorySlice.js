@@ -7,12 +7,5 @@ const initialState = searchInventory
 export const inventorySlice = createSlice({
   name: "inventory",
   initialState: initialState,
-  reducers: {
-    updateNestedMovementPlan(state, action) {
-      const {
-        inventoryId,
-        
-      }
-    }
-  }
+  reducers: {}
 })
