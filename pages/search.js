@@ -88,7 +88,6 @@ const Search = () => {
 
         <div className="flex flex-col">
           <div className="overflow-x-auto  bg-white rounded-lg">
-
             <div className="shadow sm:rounded-lg">
               <SearchTable columns={columns} data={searchInventory} detailPath="search" />
             </div>

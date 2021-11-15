@@ -46,7 +46,7 @@ const Review = () => {
       <div className="max-w-6xl mx-auto mt-10">
         <div className="bg-white py-10 px-5 mb-10 rounded-lg">
           <h3 className="text-3xl">Review Target Items</h3>
-          <p className="text-gray-500 pt-2">Explain review target items concept.</p>
+          <p className="text-gray-500 pt-1">Explain review target items concept.</p>
         </div>
 
         <div className="flex flex-col">
