@@ -1,15 +1,16 @@
-import React from 'react'
 import 'tailwindcss/tailwind.css'
+import { Provider } from 'react-redux'
 import '../styles/globals.css'
 
 import { Toaster } from "react-hot-toast"
+import store from '../shared/redux/store'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <React.Fragment>
+    <Provider store={store}>
       <Component {...pageProps} />
       <Toaster position="top-right" />
-    </React.Fragment>
+    </Provider>
   )
 }
 

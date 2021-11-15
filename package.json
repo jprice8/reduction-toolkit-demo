@@ -15,7 +15,8 @@
     "react-icons": "^4.3.1",
     "react-redux": "^7.2.6",
     "react-table": "^7.7.0",
-    "redux": "^4.1.2"
+    "redux": "^4.1.2",
+    "reselect": "^4.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.6",

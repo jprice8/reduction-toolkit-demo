@@ -1,50 +1,37 @@
 import React, { useState } from "react"
 import toast from "react-hot-toast"
+import { useSelector, useDispatch } from "react-redux"
 
 import { NoFilter } from "../shared/utils/tableHelpers"
+import { usdTwoDigits } from "../shared/utils/currencyHelper"
 import NavBar from "../shared/components/NavBar"
-import SearchTable from "../components/search/SearchTable"
-
+import NoDetailTable from "../shared/components/NoDetailTable"
 import searchInventory from "../search_inventory_data.json"
-
 import { notifyApiDisabled } from "../shared/utils/toastHelpers"
-
-const inventory = [
-  {
-    id: 1,
-    description: "VALVE, STRATA ADJUSTABLE SMALL",
-    imms: "226579",
-    remaining: "8",
-    unitCost: "$4,000",
-    total: "$32,000",
-  },
-  {
-    id: 2,
-    description: "VALVE, STRATA ADJUSTABLE SMALL",
-    imms: "226579",
-    remaining: "8",
-    unitCost: "$4,000",
-    total: "$32,000",
-  },
-  {
-    id: 3,
-    description: "VALVE, STRATA ADJUSTABLE SMALL",
-    imms: "226579",
-    remaining: "8",
-    unitCost: "$4,000",
-    total: "$32,000",
-  },
-]
+import { selectNonTargets, toggleTarget } from "../shared/redux/inventorySlice"
+import { selectDemoUser } from "../shared/redux/usersSlice"
 
 const Search = () => {
-  const [nonMoving, setNonMoving] = useState(false)
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.user[0])
+  console.log(user)
+  const nonTargets = useSelector(selectNonTargets)
+  console.log(nonTargets)
 
   const calculateExtCost = (row) => {
-    return row.unitCost * row.remaining
+    const formatttedExt = row.unitCost * row.qtyRemaining
+    return usdTwoDigits(formatttedExt)
   }
 
-  const downloadHandler = () => {
-    toast.error("Export to spreadsheet function disabled for demo!")
+  const targetHandler = (item) => {
+    dispatch(
+      toggleTarget({
+        inventoryId: parseInt(item.id),
+        isTarget: item.isTarget
+      })
+    )
+
+    toast.success(`Item ${item.imms} targeted!`)
   }
 
   const columns = React.useMemo(() => [
@@ -63,19 +50,33 @@ const Search = () => {
     },
     {
       Header: "On Hand",
-      accessor: "remaining",
+      accessor: "qtyRemaining",
       Filter: NoFilter
     },
     {
       Header: "Unit Cost",
-      accessor: "unitCost",
+      id: "unitCost",
+      accessor: row => usdTwoDigits(row.unitCost),
       Filter: NoFilter
     },
     {
       Header: "Ext Cost",
+      id: "extCost",
       accessor: row => calculateExtCost(row),
       Filter: NoFilter
     },
+    {
+      id: "target",
+      Cell: ({row}) => (
+        <button 
+          onClick={() => targetHandler(row.original)}
+          className="px-6 py-2 text-xs font-medium text-indigo-600 hover:text-indigo-700 tracking-wider cursor-pointer hover:bg-gray-200 rounded-lg uppercase"
+        >
+          Target
+        </button>
+      ),
+      Filter: NoFilter
+    }
   ])
 
   return (
@@ -89,7 +90,7 @@ const Search = () => {
         <div className="flex flex-col">
           <div className="overflow-x-auto  bg-white rounded-lg">
             <div className="shadow sm:rounded-lg">
-              <SearchTable columns={columns} data={searchInventory} detailPath="search" />
+              <NoDetailTable columns={columns} data={nonTargets} />
             </div>
           </div>
         </div>
