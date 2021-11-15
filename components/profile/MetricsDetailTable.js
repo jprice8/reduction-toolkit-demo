@@ -6,25 +6,22 @@ import {
   useFilters,
   useSortBy,
 } from "react-table"
-import Link from "next/link"
 import {
   HiChevronDoubleLeft,
   HiChevronLeft,
   HiChevronDoubleRight,
   HiChevronRight,
 } from "react-icons/hi"
-import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti"
+import {
+  TiArrowSortedDown,
+  TiArrowSortedUp
+} from 'react-icons/ti'
 
-import { DefaultColumnFilter } from "../utils/tableHelpers"
+import { DefaultColumnFilter } from "../../shared/utils/tableHelpers"
 
 const defaultPropGetter = () => ({})
 
-const Table = ({
-  columns,
-  data,
-  detailPath,
-  getRowProps = defaultPropGetter,
-}) => {
+const MetricsDetailTable = ({ columns, data, getRowProps = defaultPropGetter }) => {
   const filterTypes = React.useMemo(() => ({
     text: (rows, id, filterValue) => {
       return rows.filter((row) => {
@@ -76,17 +73,6 @@ const Table = ({
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
         ...columns,
-        {
-          id: "detail",
-          Header: () => <div></div>,
-          Cell: ({ row }) => (
-            <Link href={`/${detailPath}/${row.cells[0].value}`}>
-              <a className="px-6 py-2 text-xs font-medium text-indigo-600 hover:text-indigo-900 tracking-wider cursor-pointer hover:bg-gray-100 rounded-lg">
-                View
-              </a>
-            </Link>
-          ),
-        },
       ])
     }
   )
@@ -102,24 +88,18 @@ const Table = ({
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <th
-                  {...column.getHeaderProps()}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  <div>
-                    <span {...column.getSortByToggleProps()}>
-                      {column.render("Header")}
-                      {/* Add a sort direction indicator */}
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
-                          <TiArrowSortedDown />
-                        ) : (
-                          <TiArrowSortedUp />
-                        )
-                      ) : (
-                        ""
-                      )}
-                    </span>
-                  </div>
+                  {column.render("Header")}
+                  {/* Add a sort direction indicator */}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? <TiArrowSortedDown />
+                        : <TiArrowSortedUp />
+                      : ''}
+                  </span>
                   {/* Render the columns filter UI */}
                   <div>{column.canFilter ? column.render("Filter") : null}</div>
                 </th>
@@ -201,4 +181,4 @@ const Table = ({
   )
 }
 
-export default Table
+export default MetricsDetailTable

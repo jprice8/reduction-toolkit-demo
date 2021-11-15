@@ -3,9 +3,11 @@ import toast from "react-hot-toast"
 
 import { NoFilter } from "../shared/utils/tableHelpers"
 import NavBar from "../shared/components/NavBar"
-import Table from "../shared/components/Table"
+import SearchTable from "../components/search/SearchTable"
 
 import searchInventory from "../search_inventory_data.json"
+
+import { notifyApiDisabled } from "../shared/utils/toastHelpers"
 
 const inventory = [
   {
@@ -87,8 +89,8 @@ const Search = () => {
         <div className="flex flex-col">
           <div className="overflow-x-auto  bg-white rounded-lg">
 
-            <div className="shadow border-b border-200 sm:rounded-lg">
-              <Table columns={columns} data={searchInventory} />
+            <div className="shadow sm:rounded-lg">
+              <SearchTable columns={columns} data={searchInventory} detailPath="search" />
             </div>
           </div>
         </div>

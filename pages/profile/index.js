@@ -1,39 +1,43 @@
 import React from "react"
 import Link from "next/link"
 
-import NavBar from "../shared/components/NavBar"
+import NavBar from "../../shared/components/NavBar"
 import { FaHospital } from "react-icons/fa"
-import { NoFilter } from "../shared/utils/tableHelpers"
-import Table from "../shared/components/Table"
+import { NoFilter } from "../../shared/utils/tableHelpers"
+import Table from "../../shared/components/Table"
+
+import { submittedPlansData } from "../../shared/data/submittedPlansData"
 
 const metrics = [
-  { name: "Currently Targeted", value: "$6,000", href: "#" },
-  { name: "Removed Inventory", value: "$21,272", href: "#" },
-  { name: "Accepted Inventory", value: "$3,795", href: "#" },
-  { name: "Hidden Inventory", value: "$0", href: "#" },
+  { name: "Currently Targeted", value: "$30,500", href: "/profile/currentlyTargeted" },
+  { name: "Removed Inventory", value: "$30,500", href: "/profile/removedInventory" },
+  { name: "Incoming Inventory", value: "$0", href: "/profile/incomingInventory" },
 ]
 
 const requestData = [
   {
     id: 1,
     decision: "System",
-    date: "JUly 20, 2021, 1:49 PM",
+    date: "July 20, 2021, 1:49 PM",
+    destination: "Saint Mary's Hospital",
     description: "RELOAD, STAPLER GREEN DA VINCI XI",
     imms: "592309",
-    status: "Outstanding",
+    status: "Accepted",
   },
   {
     id: 2,
     decision: "System",
-    date: "JUly 20, 2021, 1:49 PM",
+    date: "July 20, 2021, 1:49 PM",
+    destination: "Children's Hospital",
     description: "RELOAD, STAPLER GREEN DA VINCI XI",
     imms: "592309",
-    status: "Outstanding",
+    status: "Accepted",
   },
   {
     id: 3,
-    decision: "System",
-    date: "JUly 20, 2021, 1:49 PM",
+    decision: "Sell",
+    date: "July 20, 2021, 1:49 PM",
+    destination: "Third Party Vendor",
     description: "RELOAD, STAPLER GREEN DA VINCI XI",
     imms: "592309",
     status: "Outstanding",
@@ -56,7 +60,7 @@ const profile = () => {
       accessor: "destination",
     },
     {
-      Header: "Date",
+      Header: "Date Submitted",
       accessor: "date",
       Filter: NoFilter,
     },
@@ -89,7 +93,7 @@ const profile = () => {
             </div>
             {/* Metrics */}
 
-            <div className="border-t mt-5 border-gray-600 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="border-t mt-5 border-gray-600 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {metrics.map((item) => (
                 <div
                   key={item.name}
@@ -106,7 +110,7 @@ const profile = () => {
                     <div className="absolute bottom-0 inset-x-0 bg-gray-50 px-4 py-4 sm:px-6 rounded-lg">
                       <div className="text-sm">
                         <Link href={item.href}>
-                          <a className="font-medium text-gray-600 hover:text-gray-900">
+                          <a className="font-medium text-indigo-600 hover:text-indigo-900">
                             View All
                           </a>
                         </Link>
@@ -124,14 +128,21 @@ const profile = () => {
           <div className="my-10 rounded-lg bg-white">
             <div className="p-4">
               <h4 className="text-2xl">Outgoing Requests</h4>
-              <p className="text-gray-500 pt-2">Explain outgoing requests.</p>
+              <p className="text-gray-500 pt-2">
+                All submitted movement plans can be tracked in the Director's outgoing
+                request table.
+              </p>
             </div>
           </div>
 
           <div className="flex flex-col">
             <div className="overflow-x-auto bg-white rounded-lg">
               <div className="shadow border-b border-200 sm:rounded-lg">
-                <Table columns={columns} data={requestData} />
+                <Table
+                  columns={columns}
+                  data={submittedPlansData}
+                  detailPath={"profile"}
+                />
               </div>
             </div>
           </div>

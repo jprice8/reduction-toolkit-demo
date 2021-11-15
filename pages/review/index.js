@@ -1,9 +1,9 @@
 import React from "react"
-import NavBar from "../shared/components/NavBar"
-import Table from "../shared/components/Table"
-import { NoFilter, calculateExtCost } from "../shared/utils/tableHelpers"
+import NavBar from "../../shared/components/NavBar"
+import Table from "../../shared/components/Table"
+import { NoFilter, calculateExtCost } from "../../shared/utils/tableHelpers"
 
-import reviewInventory from "../search_inventory_data.json"
+import { targetData } from "../../shared/data/targetData"
 
 const Review = () => {
   const columns = React.useMemo(() => [
@@ -52,7 +52,7 @@ const Review = () => {
         <div className="flex flex-col">
           <div className="overflow-x-auto bg-white rounded-lg">
             <div className="shadow sm:rounded-lg">
-              <Table columns={columns} data={reviewInventory} />
+              <Table columns={columns} data={targetData} detailPath="review" />
             </div>
           </div>
         </div>
