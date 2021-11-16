@@ -50,23 +50,25 @@ const ReviewDetail = () => {
 
   return (
     <NavBar>
-      <div className="max-w-4xl mx-auto mt-10">
-        <div>
-          <h2 className="text-3xl">Review Target Item</h2>
-          <p className="text-gray-500">
+      <div className="max-w-5xl mx-auto mt-10">
+        <div className="bg-white p-10 rounded-md shadow-md">
+          <h2 className="text-4xl">Review Target Item</h2>
+          <p className="text-gray-500 pt-1">
             Create or view movement plans for this item
           </p>
         </div>
 
         <div className="mt-5 bg-white flex justify-between p-10 rounded-md">
-          <div>
+          <div className="border p-5 space-y-2 text-gray-900">
             <h3 className="text-2xl">{item?.description}</h3>
-            <p className="text-gray-500">IMMS # {item?.imms}</p>
-            <p className="text-xl">{item?.qtyRemaining} Units Remaining</p>
-            <p className="text-xl">{plans.length} Plans Set</p>
+            <div className="font-light space-y-2">
+              <p className="">IMMS # {item?.imms}</p>
+              <p className="">{item?.qtyRemaining} Units Remaining</p>
+              <p className="">{plans.length} Plans Set</p>
+            </div>
           </div>
 
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-4 border p-5">
             {item.qtyRemaining > 0 ? (
               <Link href={`/review/create/${itemId}`}>
                 <div className="cursor-pointer inline-flex items-center px-4 py-2 border border-transparent shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

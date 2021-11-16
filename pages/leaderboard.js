@@ -1,37 +1,77 @@
 import React from "react"
+import { useSelector } from "react-redux"
+
 import NavBar from "../shared/components/NavBar"
-import Table from "../shared/components/Table"
-import LeaderboardTable from "../components/leaderboard/LeaderboardTable"
+import NoDetailTable from "../shared/components/NoDetailTable"
 import { NoFilter } from "../shared/utils/tableHelpers"
 
-const leaderboardData = [
-  {
-    rank: 1,
-    user: "Alex",
-    facility: "North Central Baptist Hospital",
-    plansSubmitted: 20,
-    plansFinalized: 17,
-    extReduction: "$21,272.33",
-  },
-  {
-    rank: 2,
-    user: "Alex",
-    facility: "North Central Baptist Hospital",
-    plansSubmitted: 20,
-    plansFinalized: 17,
-    extReduction: "$21,272.33",
-  },
-  {
-    rank: 3,
-    user: "Alex",
-    facility: "North Central Baptist Hospital",
-    plansSubmitted: 20,
-    plansFinalized: 17,
-    extReduction: "$21,272.33",
-  },
-]
-
 const Leaderboard = () => {
+  const users = useSelector((state) => state.users)
+  const plans = useSelector((state) => state.plan)
+
+  // Calculate leaderboard metrics for all directors in
+  // Big O(N) time using a hash table.
+  const userHm = {}
+  const userLookup = {}
+  for (let i = 0; i < users.length; i++) {
+    // Create hashmap for metrics
+    userHm[users[i].id] = {
+      plansSubmitted: 0,
+      plansFinalized: 0,
+      inventoryReduced: 0,
+    }
+
+    // Create hashmap for user info
+    userLookup[users[i].id] = {
+      firstName: users[i].userFirstName,
+      facility: users[i].facility,
+    }
+  }
+
+  for (let j = 0; j < plans.length; j++) {
+    let tmpPlan = plans[j]
+    let existingUserHm = userHm[tmpPlan.userId]
+
+    // Handle submitted
+    existingUserHm.plansSubmitted++
+
+    if (tmpPlan.status === "accepted") {
+      // Handle finalized
+      existingUserHm.plansFinalized++
+      // Handle reduced
+      existingUserHm.inventoryReduced += tmpPlan.acceptedExt
+    }
+  }
+
+  // Create leaderboard data array for table
+  const leaderboardData = []
+  const keys = Object.keys(userHm)
+  for (let k = 0; k < keys.length; k++) {
+    const tmpObject = {}
+    // Add user
+    tmpObject["user"] = userLookup[keys[k]].firstName
+    // Add facility
+    tmpObject["facility"] = userLookup[keys[k]].facility
+    // Add plans submitted
+    tmpObject["plansSubmitted"] = userHm[keys[k]].plansSubmitted
+    // Add plans finalized
+    tmpObject["plansFinalized"] = userHm[keys[k]].plansFinalized
+    // Add ext reduced
+    tmpObject["extReduction"] = userHm[keys[k]].inventoryReduced
+
+    leaderboardData.push(tmpObject)
+  }
+
+  // Sort by reduction ext
+  leaderboardData.sort(function(a, b) {
+    return b.extReduction - a.extReduction
+  })
+
+  // Rank directors
+  for (let d = 0; d < leaderboardData.length; d++) {
+    leaderboardData[d]['rank'] = d + 1
+  }
+
   const columns = React.useMemo(() => [
     {
       Header: "Rank",
@@ -67,13 +107,13 @@ const Leaderboard = () => {
       <div className="max-w-5xl mx-auto mt-10">
         <div className="bg-white py-10 px-5 mb-10 rounded-lg">
           <h3 className="text-3xl">Leaderboard</h3>
-          <p className="text-gray-500 pt-2">Explain the leaderboard concept.</p>
+          <p className="text-gray-500 pt-2">The leaderboard shows up-to-date metrics on how each facility is performing in inventory reduction.</p>
         </div>
 
         <div className="flex flex-col">
           <div className="overflow-x-auto bg-white rounded-lg">
             <div className="shadow sm:rounded-lg">
-              <LeaderboardTable columns={columns} data={leaderboardData} />
+              <NoDetailTable columns={columns} data={leaderboardData} />
             </div>
           </div>
         </div>

@@ -6,62 +6,38 @@ import { FaHospital } from "react-icons/fa"
 import { NoFilter } from "../../shared/utils/tableHelpers"
 import Table from "../../shared/components/Table"
 
-import { submittedPlansData } from "../../shared/data/submittedPlansData"
 import { useSelector } from "react-redux"
 import { selectPlansByUserId } from "../../shared/redux/planSlice"
 import { selectTargets } from "../../shared/redux/inventorySlice"
-import { calcCurrentlyTargeted } from "../../shared/utils/metricsHelper"
+import { calcCurrentlyTargeted, calcPlansCompleted, calcRemovedInventory } from "../../shared/utils/metricsHelper"
 import { usdTwoDigits } from "../../shared/utils/currencyHelper"
+import { format } from "date-fns"
 
-const requestData = [
-  {
-    id: 1,
-    decision: "System",
-    date: "July 20, 2021, 1:49 PM",
-    destination: "Saint Mary's Hospital",
-    description: "RELOAD, STAPLER GREEN DA VINCI XI",
-    imms: "592309",
-    status: "Accepted",
-  },
-  {
-    id: 2,
-    decision: "System",
-    date: "July 20, 2021, 1:49 PM",
-    destination: "Children's Hospital",
-    description: "RELOAD, STAPLER GREEN DA VINCI XI",
-    imms: "592309",
-    status: "Accepted",
-  },
-  {
-    id: 3,
-    decision: "Sell",
-    date: "July 20, 2021, 1:49 PM",
-    destination: "Third Party Vendor",
-    description: "RELOAD, STAPLER GREEN DA VINCI XI",
-    imms: "592309",
-    status: "Outstanding",
-  },
-]
 
 const profile = () => {
   const user = useSelector((state) => state.users[0])
   const plans = useSelector((state) => selectPlansByUserId(state, user?.id))
+  const inventory = useSelector((state) => state.inventory)
+
+  const targetedExt = calcCurrentlyTargeted(inventory)
+  const removedExt = calcRemovedInventory(plans)
+  const completedPlans = calcPlansCompleted(plans)
 
   const metrics = [
     {
       name: "Currently Targeted",
-      value: usdTwoDigits(user?.targetedExt),
+      value: usdTwoDigits(targetedExt),
       href: "/profile/currentlyTargeted",
     },
     {
       name: "Removed Inventory",
-      value: usdTwoDigits(user?.removedExt),
-      href: "/profile/removedInventory",
+      value: usdTwoDigits(removedExt),
+      href: "/profile/completedPlans",
     },
     {
-      name: "Incoming Inventory",
-      value: usdTwoDigits(user?.incomingExt),
-      href: "/profile/incomingInventory",
+      name: "Plans Completed",
+      value: completedPlans,
+      href: "/profile/completedPlans",
     },
   ]
 
@@ -81,7 +57,7 @@ const profile = () => {
     },
     {
       Header: "Date Submitted",
-      accessor: "dateSubmitted",
+      accessor: row => format(new Date(row.dateSubmitted), 'PPpp'),
       Filter: NoFilter,
     },
     {

@@ -1,5 +1,6 @@
 import { useRouter } from "next/router"
 import React from "react"
+import { format } from "date-fns"
 
 import NavBar from "../../../shared/components/NavBar"
 import NoDetailTable from "../../../shared/components/NoDetailTable"
@@ -8,6 +9,7 @@ import { NoFilter } from "../../../shared/utils/tableHelpers"
 import { useSelector } from "react-redux"
 import { selectTargetById } from "../../../shared/redux/inventorySlice"
 import { selectPlansByItemId } from "../../../shared/redux/planSlice"
+import { usdTwoDigits } from "../../../shared/utils/currencyHelper"
 
 const ViewItemPlans = () => {
   const router = useRouter()
@@ -24,7 +26,7 @@ const ViewItemPlans = () => {
     },
     {
       Header: "Date Requested",
-      accessor: "dateSubmitted",
+      accessor: row => format(new Date(row.dateSubmitted), 'PPpp'),
       Filter: NoFilter,
     },
     {
@@ -43,12 +45,12 @@ const ViewItemPlans = () => {
     },
     {
       Header: "LUOM Price",
-      accessor: "unitCost",
+      accessor: row => usdTwoDigits(row.unitCost),
       Filter: NoFilter,
     },
     {
       Header: "Accepted Ext Price",
-      accessor: "acceptedExtPrice",
+      accessor: row => usdTwoDigits(row.acceptedExt),
       Filter: NoFilter,
     },
     {

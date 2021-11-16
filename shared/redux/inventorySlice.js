@@ -10,8 +10,8 @@ const initialState = [
     imms: "123456",
     qtyRemaining: 10,
     unitCost: 100.0,
-    isTarget: false,
-    movementPlans: 0,
+    isTarget: true,
+    movementPlans: 1,
     systemOutlook: [
       {
         facilityName: "Central Hospital",

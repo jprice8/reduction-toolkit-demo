@@ -1,6 +1,8 @@
 import React from "react"
+import { useSelector } from "react-redux"
 import NavBar from "../shared/components/NavBar"
 import Table from "../shared/components/Table"
+import { selectShippingByUserId } from "../shared/redux/shippingSlice"
 import { NoFilter } from "../shared/utils/tableHelpers"
 
 const shippingData = [
@@ -36,6 +38,9 @@ const shippingData = [
 ]
 
 const Shipping = () => {
+  const user = useSelector((state) => state.users[0])
+  const shipping = useSelector((state) => selectShippingByUserId(state, user.id))
+  console.log(shipping)
   
   const columns = React.useMemo(() => [
     {
@@ -61,8 +66,8 @@ const Shipping = () => {
       Filter: NoFilter,
     },
     {
-      Header: "Estimated Delivery",
-      accessor: "estimatedDelivery",
+      Header: "Estimated Arrival",
+      accessor: "estimatedArrival",
       Filter: NoFilter,
     },
   ])
@@ -78,7 +83,7 @@ const Shipping = () => {
         <div className="flex flex-col">
           <div className="overflow-x-auto bg-white rounded-lg">
             <div className="shadow sm:rounded-lg">
-              <Table columns={columns} data={shippingData} />
+              <Table columns={columns} data={shipping} />
             </div>
           </div>
         </div>

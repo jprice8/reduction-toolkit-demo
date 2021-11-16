@@ -3,19 +3,23 @@ import { createSlice, nanoid } from "@reduxjs/toolkit"
 import { createSelector } from "reselect"
 
 const initialState = [
-  // {
-  //   id: nanoid(),
-  //   dateSubmitted: new Date().toISOString(),
-  //   inventoryId: "1aa",
-  //   userId: "4a",
-  //   facilityName: "Central Hospital",
-  //   sendQty: 4,
-  //   decision: "sell",
-  //   destination: "other",
-  //   unitCost: 100.0,
-  //   imms: "292929",
-  //   description: "INTRODUCER, STEALTH 30MM",
-  // },
+  {
+    id: nanoid(),
+    dateSubmitted: new Date().toISOString(),
+    inventoryId: "1a",
+    userId: "1a",
+    facilityName: "Baptist Hospital",
+    sendQty: 5,
+    decision: "system",
+    destination: "University Hospital",
+    unitCost: 100.0,
+    imms: "123456",
+    description: "BLADE",
+    status: "accepted",
+    acceptedQty: 5,
+    acceptedExt: 500.0,
+    isFinalized: false,
+  },
 ]
 
 const planSlice = createSlice({
@@ -26,6 +30,13 @@ const planSlice = createSlice({
       reducer(state, action) {
         state.push(action.payload)
       },
+    },
+    finalizePlan(state, action) {
+      const { planId } = action.payload
+      const existingPlan = state.find((p) => p.id === planId)
+      if (existingPlan) {
+        existingPlan.isFinalized = true
+      }
     },
   },
 })
@@ -46,6 +57,6 @@ export const selectPlanById = createSelector(
   (plan, planId) => plan.find((p) => p.id === planId)
 )
 
-export const { planAdded } = planSlice.actions
+export const { planAdded, finalizePlan } = planSlice.actions
 
 export default planSlice.reducer

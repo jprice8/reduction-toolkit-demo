@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 import NavBar from "../shared/components/NavBar"
 import Footer from "../shared/components/Footer"
@@ -6,7 +7,7 @@ import Footer from "../shared/components/Footer"
 export default function Home() {
   return (
     <NavBar>
-     <div className="max-w-3xl mx-auto flex flex-col h-full justify-between">
+      <div className="max-w-3xl mx-auto flex flex-col">
         <div className="mt-20 bg-white p-10 shadow-md rounded-md space-y-4">
           <h2 className="text-center text-3xl text-gray-900 font-bold">
             Welcome!
@@ -27,30 +28,74 @@ export default function Home() {
 
           <p>
             The scenario that this demo app portrays is the following. You are a
-            supply chain director for a local hospital. Every week on Sunday
-            night, the backend of the production tool generates a list of five
-            items that the system's algorithm has deemed to be held in excess of
-            what your historical demand has shown. You find an email in your
-            inbox telling you that there are five new items for you to review
-            and reset. You then follow the link on the email to this site where
-            you can start resetting your inventory levels on the
-            &quot;Reset&quot; tab.
+            supply chain director for a local hospital. Your health system is
+            trying to reduce excess and non-moving inventory from its non-stock
+            inventory (inventory that can&quot;t be tracked through a digital
+            system). This turns out to be an unwieldy task because of the sheer
+            size of the inventory. There are several thousand SKUs (Store
+            Keeping Units) at each facility, so where do you even begin.
           </p>
 
-          <h4 className="text-xl font-semibold">Specs</h4>
+          <p>Thanks to experience, you can logically conclude the following:</p>
+          <ul className="ml-6 list-disc">
+            <li>
+              The achilles heel to any supply chain is non-moving inventory, or
+              inventory that just sits in your warehouse and doesn&apos;t move.
+            </li>
+            <li>
+              The 80/20 rule would have us believe that roughly 80% of the total
+              cost would come from 20% of the items.
+            </li>
+          </ul>
 
           <p>
-            The version of this app that is in production uses a backend API
-            that is written in Python using the Django Rest Framework. Data is
-            saved using a PostgreSQL cluster which is managed by AWS. The
-            frontend client is very similiar to the demo app you are using right
-            now. It is a Single Page Application using the React library with
-            state management using Redux. To help simplify the demo app, it is
-            disconnected from a backend and is maintaining all data within the
-            client using Redux. Simply refresh the browser to start over.
+            Therefore, you should first take your several thousand SKUs and find
+            out which of them are not moving. Once you have that, you should
+            sort them by most expensive to least expensive and take the top 20%.
+            The several hundred SKUs you get back should be where you start
+            first.
           </p>
 
+          <h4 className="text-xl font-semibold">Process</h4>
+
+          <p>
+            Even though you now have a list of the items that you should be
+            targeting, you still don't have a way to manage the process. You
+            could use a spreadsheet, but after several cycles of this process
+            that spreadsheet would grow far too big. Plus, your hospital is in a
+            system with several other facilities who are also doing the same
+            thing. After several cycles of all the directors sending
+            spreadsheets around labled, &quot;COPY OF COPY OF COPY OF Inventory
+            Review FINAL 16&quot;, you quickly find yourself in spreadsheet
+            hell.
+          </p>
+
+          <p className="font-semibold">
+            The Reduction Toolkit app attempts to solve the problems above by
+            providing a simple way to list your high priority SKUs and offer a
+            way to manage the process in one place.
+          </p>
+
+          <p>
+            Click on the process link to read more on how the process of the app 
+            works. Click on the specs link if you like to read more on the 
+            technical specifications of the web app.
+          </p>
+
+          <div className="flex justify-evenly">
+            <Link href="/welcome/process">
+              <div className="cursor-pointer text-indigo-500 hover:text-indigo-600">
+                Process
+              </div>
+            </Link>
+            <Link href="/welcome/specs">
+              <div className="cursor-pointer text-indigo-500 hover:text-indigo-600">
+                Specs
+              </div>
+            </Link>
+          </div>
         </div>
+
         <div>
           <Footer />
         </div>

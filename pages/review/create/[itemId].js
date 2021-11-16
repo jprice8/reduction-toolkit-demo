@@ -66,6 +66,7 @@ const CreateItemPlan = () => {
         status: "outstanding",
         acceptedQty: 0,
         acceptedExt: 0,
+        isFinalized: false
       })
     )
 
