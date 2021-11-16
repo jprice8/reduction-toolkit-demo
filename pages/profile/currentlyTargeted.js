@@ -1,13 +1,16 @@
 import React from "react"
 import toast from "react-hot-toast"
 import { HiDocumentDownload } from "react-icons/hi"
+import { useSelector } from "react-redux"
 import MetricsDetailTable from "../../components/profile/metricsDetailTable"
 import NavBar from "../../shared/components/NavBar"
 
-import { targetData } from "../../shared/data/targetData"
-import { NoFilter } from "../../shared/utils/tableHelpers"
+import { selectTargets } from "../../shared/redux/inventorySlice"
+import { calculateExtCost, NoFilter } from "../../shared/utils/tableHelpers"
 
 const CurrentlyTargeted = () => {
+  const targets = useSelector(selectTargets)
+
   const downloadHandler = () => {
     toast.error("Export to spreadsheet function disabled for demo!")
   }
@@ -23,20 +26,16 @@ const CurrentlyTargeted = () => {
       accessor: "imms",
     },
     {
-      Header: "Mfr",
-      accessor: "mfr",
-    },
-    {
-      Header: "Catalog No",
-      accessor: "mfrCatNo",
-    },
-    {
       Header: "Description",
       accessor: "description",
     },
     {
+      Header: "Plans Submitted",
+      accessor: "movementPlans"
+    },
+    {
       Header: "Remaining Units",
-      accessor: "remaining",
+      accessor: "qtyRemaining",
       Filter: NoFilter,
     },
     {
@@ -46,7 +45,7 @@ const CurrentlyTargeted = () => {
     },
     {
       Header: "Ext Cost",
-      accessor: "extCost",
+      accessor: (row) => calculateExtCost(row),
       Filter: NoFilter,
     },
   ])
@@ -74,7 +73,7 @@ const CurrentlyTargeted = () => {
         <div className="flex flex-col">
           <div className="overflow-x-auto bg-white rounded-lg">
             <div className="shadow sm:rounded-lg">
-              <MetricsDetailTable columns={columns} data={targetData} />
+              <MetricsDetailTable columns={columns} data={targets} />
             </div>
           </div>
         </div>

@@ -4,34 +4,96 @@ import { createSelector } from "reselect"
 
 const initialState = [
   {
-    id: 1,
-    facilityName: 'Baptist Hospital',
-    description: 'BLADE',
-    imms: '123456',
+    id: "1a",
+    facilityName: "Baptist Hospital",
+    description: "BLADE",
+    imms: "123456",
     qtyRemaining: 10,
-    unitCost: 100.00,
+    unitCost: 100.0,
     isTarget: false,
-    movementPlans: []
+    movementPlans: 0,
+    systemOutlook: [
+      {
+        facilityName: "Central Hospital",
+        countQty: 0,
+        poQty: 12,
+        issueQty: 0,
+      },
+      {
+        facilityName: "Methodist Hospital",
+        countQty: 0,
+        poQty: 24,
+        issueQty: 0,
+      },
+      {
+        facilityName: "University Hospital",
+        countQty: 0,
+        poQty: 0,
+        issueQty: 0,
+      },
+    ],
   },
+
   {
-    id: 2,
-    facilityName: 'Baptist Hospital',
-    description: 'SCALPEL',
-    imms: '234567',
+    id: "2a",
+    facilityName: "Baptist Hospital",
+    description: "SCALPEL",
+    imms: "234567",
     qtyRemaining: 5,
-    unitCost: 200.00,
+    unitCost: 200.0,
     isTarget: false,
-    movementPlans: []
+    movementPlans: 0,
+    systemOutlook: [
+      {
+        facilityName: "Central Hospital",
+        countQty: 20,
+        poQty: 100,
+        issueQty: 0,
+      },
+      {
+        facilityName: "Methodist Hospital",
+        countQty: 10,
+        poQty: 50,
+        issueQty: 0,
+      },
+      {
+        facilityName: "University Hospital",
+        countQty: 0,
+        poQty: 0,
+        issueQty: 0,
+      },
+    ],
   },
+
   {
-    id: 3,
-    facilityName: 'Baptist Hospital',
-    description: 'CATHETER',
-    imms: '345678',
+    id: "3a",
+    facilityName: "Baptist Hospital",
+    description: "CATHETER",
+    imms: "345678",
     qtyRemaining: 10,
-    unitCost: 200.00,
+    unitCost: 200.0,
     isTarget: true,
-    movementPlans: []
+    movementPlans: 0,
+    systemOutlook: [
+      {
+        facilityName: "Central Hospital",
+        countQty: 80,
+        poQty: 300,
+        issueQty: 0,
+      },
+      {
+        facilityName: "Methodist Hospital",
+        countQty: 40,
+        poQty: 150,
+        issueQty: 0,
+      },
+      {
+        facilityName: "University Hospital",
+        countQty: 20,
+        poQty: 80,
+        issueQty: 0,
+      },
+    ],
   },
 ]
 
@@ -39,25 +101,21 @@ const inventorySlice = createSlice({
   name: "inventory",
   initialState: initialState,
   reducers: {
-    updateNestedMovementPlan(state, action) {
+    addMovementPlan(state, action) {
       const {
-        userId,
         inventoryId,
-        facilityName,
-        sendQty,
-        decision,
-        destination,
+        sendQty
       } = action.payload
       const existingInventory = state.find((i) => i.id === inventoryId)
+
       if (existingInventory) {
-        existingInventory.movementPlans.userId = userId
-        existingInventory.movementPlans.facilityName = facilityName
-        existingInventory.movementPlans.sendQty = sendQty
-        existingInventory.movementPlans.decision = decision
-        existingInventory.movementPlans.destination = destination
-        existingInventory.movementPlans.dateSubmitted = new Date().toISOString()
-        existingInventory.movementPlans.isFinalized = false
+        // Increment plan count
+        existingInventory.movementPlans += 1
+        // Subtract sendQty from remaining qty
+        existingInventory.qtyRemaining -= sendQty
       }
+
+      
     },
     toggleTarget(state, action) {
       const { inventoryId, isTarget } = action.payload
@@ -65,7 +123,7 @@ const inventorySlice = createSlice({
       if (existingInventory) {
         existingInventory.isTarget = !isTarget
       }
-    }
+    },
   },
 })
 
@@ -75,5 +133,16 @@ export const selectNonTargets = createSelector(
   (inv) => inv.filter((i) => i.isTarget === false)
 )
 
-export const { updateNestedMovementPlan, toggleTarget } = inventorySlice.actions
+export const selectTargets = createSelector(
+  (state) => state.inventory,
+  (inv) => inv.filter((i) => i.isTarget === true)
+)
+
+export const selectTargetById = createSelector(
+  [(state) => state.inventory, (state, itemId) => itemId],
+  (inventory, itemId) =>
+    inventory.find((i) => (i.id) === itemId)
+)
+
+export const { addMovementPlan, toggleTarget } = inventorySlice.actions
 export default inventorySlice.reducer

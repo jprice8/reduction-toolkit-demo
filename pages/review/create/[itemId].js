@@ -1,17 +1,16 @@
 import React from "react"
 import { useRouter } from "next/router"
 import { useForm, useWatch } from "react-hook-form"
+import { useDispatch, useSelector } from "react-redux"
 
 import ErrorModal from "../../../shared/components/ErrorModal"
 import NavBar from "../../../shared/components/NavBar"
 import NoDetailTable from "../../../shared/components/NoDetailTable"
 import { NoFilter } from "../../../shared/utils/tableHelpers"
-
-const systemData = [
-  { facility: "Central Hospital", qtyOnHand: 0, poQty: 12, issueQty: 0 },
-  { facility: "University Hospital", qtyOnHand: 24, poQty: 0, issueQty: 0 },
-  { facility: "Methodist Hospital", qtyOnHand: 0, poQty: 0, issueQty: 0 },
-]
+import { selectTargetById, addMovementPlan } from "../../../shared/redux/inventorySlice"
+import toast from "react-hot-toast"
+import { planAdded } from "../../../shared/redux/planSlice"
+import { nanoid } from "@reduxjs/toolkit"
 
 const CreateItemPlan = () => {
   const {
@@ -25,6 +24,11 @@ const CreateItemPlan = () => {
   const router = useRouter()
   const { itemId } = router.query
 
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.users[0])
+  const item = useSelector((state) => selectTargetById(state, itemId))
+  const systemData = item?.systemOutlook
+
   // Handle cancel button
   const onCancel = () => {
     router.push(`/review/${itemId}`)
@@ -35,27 +39,55 @@ const CreateItemPlan = () => {
   const decisionState = useWatch({
     control,
     name: "decision",
-    defaultValue: "noDecision"
+    defaultValue: "other",
   })
-  console.log(decisionState)
 
   // Handle submit button
   const onSubmit = (data) => {
-    console.log(data)
-    // Empty UI inputs
-    setValue("quantity", "")
+    // If not system plan, set destination to other.
+    if (data.decision != "system") {
+      data.destination = "other"
+    }
 
+    // Dispatch redux reducer to add movement plan to store
+    dispatch(
+      planAdded({
+        id: nanoid(),
+        dateSubmitted: new Date().toISOString(),
+        inventoryId: itemId,
+        userId: user.id,
+        facilityName: item.facilityName,
+        sendQty: parseInt(data.quantity),
+        decision: data.decision,
+        destination: data.destination,
+        unitCost: item.unitCost,
+        imms: item.imms,
+        description: item.description,
+        status: "outstanding",
+        acceptedQty: 0,
+        acceptedExt: 0,
+      })
+    )
+
+    dispatch(
+      addMovementPlan({
+        inventoryId: itemId,
+        sendQty: parseInt(data.quantity),
+      })
+    )
+
+    toast.success("Movement plan set successfully!")
     router.push(`/review/${itemId}`)
   }
 
   const columns = React.useMemo(() => [
     {
       Header: "Facility",
-      accessor: "facility",
+      accessor: "facilityName",
     },
     {
       Header: "Last Count",
-      accessor: "qtyOnHand",
+      accessor: "countQty",
       Filter: NoFilter,
     },
     {
@@ -83,13 +115,20 @@ const CreateItemPlan = () => {
         <div className="mt-5">
           <div className="bg-white p-5 shadow-md rounded-md mb-5">
             <div>
-              <h3 className="text-lg leading-6 font-medium text-gray-900">System Outlook</h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">See what this item is doing around the system</p>
+              <h3 className="text-lg leading-6 font-medium text-gray-900">
+                System Outlook
+              </h3>
+              <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                See what this item is doing around the system
+              </p>
             </div>
             <div className="mt-4">
               <div>
                 <div>
-                  <NoDetailTable columns={columns} data={systemData} />
+                  <NoDetailTable
+                    columns={columns}
+                    data={systemData ? systemData : []}
+                  />
                 </div>
               </div>
             </div>
@@ -107,7 +146,11 @@ const CreateItemPlan = () => {
                       Movement Form
                     </h3>
                     <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                      Tell the app how you'd like to move this item
+                      Tell the app how you'd like to move this item. You have{" "}
+                      <span className="font-bold">
+                        {item.qtyRemaining} units left
+                      </span>{" "}
+                      of this item.
                     </p>
                   </div>
 
@@ -127,11 +170,20 @@ const CreateItemPlan = () => {
                           className="py-1 px-4 max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"
                           {...register("quantity", {
                             required: true,
+                            max: item?.qtyRemaining,
+                            min: 1,
                           })}
                         />
-                        {errors.quantity && (
-                          <ErrorModal errorMessage="Your input is required" />
+                        {errors.quantity && errors.quantity.type === "max" && (
+                          <ErrorModal errorMessage="You are trying to move more units than you have recorded on hand" />
                         )}
+                        {errors.quantity && errors.quantity.type === "min" && (
+                          <ErrorModal errorMessage="You must enter a positive number" />
+                        )}
+                        {errors.quantity &&
+                          errors.quantity.type === "required" && (
+                            <ErrorModal errorMessage="Your input is required" />
+                          )}
                       </div>
                     </div>
 
@@ -197,40 +249,39 @@ const CreateItemPlan = () => {
                       </div>
                     </div>
 
-                    {decisionState === 'system' ? (
+                    {decisionState === "system" ? (
                       <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-                      <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5 content-center">
-                        <label
-                          htmlFor="destination"
-                          className="block text-sm font-medium text-gray-700 pt-1"
-                        >
-                          Destination
-                        </label>
-                        <div className="col-span-2">
-                          <select
-                            className="max-w-lg border py-1 px-4 block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                            {...register("destination", { required: true })}
+                        <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5 content-center">
+                          <label
+                            htmlFor="destination"
+                            className="block text-sm font-medium text-gray-700 pt-1"
                           >
-                            <option value="Central Hospital">
-                              Central Hospital
-                            </option>
-                            <option value="University Hospital">
-                              University Hospital
-                            </option>
-                            <option value="Methodist Hospital">
-                              Methodist Hospital
-                            </option>
-                          </select>
+                            Destination
+                          </label>
+                          <div className="col-span-2">
+                            <select
+                              className="max-w-lg border py-1 px-4 block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                              {...register("destination", { required: true })}
+                            >
+                              <option value="Central Hospital">
+                                Central Hospital
+                              </option>
+                              <option value="University Hospital">
+                                University Hospital
+                              </option>
+                              <option value="Methodist Hospital">
+                                Methodist Hospital
+                              </option>
+                            </select>
+                          </div>
+                          {errors.destination && (
+                            <ErrorModal errorMessage="Your input is required" />
+                          )}
                         </div>
-                        {errors.destination && (
-                          <ErrorModal errorMessage="Your input is required" />
-                        )}
                       </div>
-                    </div>
                     ) : (
                       <div></div>
                     )}
-
 
                     <div className="pt-5 sm:border-t sm:border-gray-200 sm:pt-5">
                       <div className="flex justify-end">

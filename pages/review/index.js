@@ -3,9 +3,14 @@ import NavBar from "../../shared/components/NavBar"
 import Table from "../../shared/components/Table"
 import { NoFilter, calculateExtCost } from "../../shared/utils/tableHelpers"
 
-import { targetData } from "../../shared/data/targetData"
+import { useSelector } from "react-redux"
+import { selectTargets } from "../../shared/redux/inventorySlice"
+import { usdTwoDigits } from "../../shared/utils/currencyHelper"
+import { selectPlansByItemId } from "../../shared/redux/planSlice"
 
 const Review = () => {
+  const targets = useSelector(selectTargets)
+
   const columns = React.useMemo(() => [
     {
       Header: "ID",
@@ -21,18 +26,17 @@ const Review = () => {
       accessor: "imms",
     },
     {
-      Header: "Plans Set",
-      accessor: "plansSet",
-      Filter: NoFilter,
+      Header: "Plans Submitted",
+      accessor: "movementPlans"
     },
     {
       Header: "Units Remaining",
-      accessor: "remaining",
+      accessor: "qtyRemaining",
       Filter: NoFilter,
     },
     {
       Header: "Unit Cost",
-      accessor: "unitCost",
+      accessor: (row) => usdTwoDigits(row.unitCost),
       Filter: NoFilter,
     },
     {
@@ -52,7 +56,7 @@ const Review = () => {
         <div className="flex flex-col">
           <div className="overflow-x-auto bg-white rounded-lg">
             <div className="shadow sm:rounded-lg">
-              <Table columns={columns} data={targetData} detailPath="review" />
+              <Table columns={columns} data={targets} detailPath="review" />
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import toast from "react-hot-toast"
 import { useSelector, useDispatch } from "react-redux"
 
@@ -6,28 +6,29 @@ import { NoFilter } from "../shared/utils/tableHelpers"
 import { usdTwoDigits } from "../shared/utils/currencyHelper"
 import NavBar from "../shared/components/NavBar"
 import NoDetailTable from "../shared/components/NoDetailTable"
-import searchInventory from "../search_inventory_data.json"
-import { notifyApiDisabled } from "../shared/utils/toastHelpers"
+import { calculateExtCost } from "../shared/utils/tableHelpers"
 import { selectNonTargets, toggleTarget } from "../shared/redux/inventorySlice"
-import { selectDemoUser } from "../shared/redux/usersSlice"
+import { addTargetedExt } from "../shared/redux/usersSlice"
 
 const Search = () => {
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.user[0])
-  console.log(user)
   const nonTargets = useSelector(selectNonTargets)
-  console.log(nonTargets)
-
-  const calculateExtCost = (row) => {
-    const formatttedExt = row.unitCost * row.qtyRemaining
-    return usdTwoDigits(formatttedExt)
-  }
+  const user = useSelector((state) => state.users[0])
 
   const targetHandler = (item) => {
+    const ext = item.unitCost * item.qtyRemaining
+
     dispatch(
       toggleTarget({
-        inventoryId: parseInt(item.id),
-        isTarget: item.isTarget
+        inventoryId: item.id,
+        isTarget: item.isTarget,
+      })
+    )
+
+    dispatch(
+      addTargetedExt({
+        userId: user.id,
+        ext: ext,
       })
     )
 
@@ -49,34 +50,38 @@ const Search = () => {
       accessor: "imms",
     },
     {
-      Header: "On Hand",
+      Header: "Plans Submitted",
+      accessor: "movementPlans",
+    },
+    {
+      Header: "Units Remaining",
       accessor: "qtyRemaining",
-      Filter: NoFilter
+      Filter: NoFilter,
     },
     {
       Header: "Unit Cost",
       id: "unitCost",
-      accessor: row => usdTwoDigits(row.unitCost),
-      Filter: NoFilter
+      accessor: (row) => usdTwoDigits(row.unitCost),
+      Filter: NoFilter,
     },
     {
       Header: "Ext Cost",
       id: "extCost",
-      accessor: row => calculateExtCost(row),
-      Filter: NoFilter
+      accessor: (row) => calculateExtCost(row),
+      Filter: NoFilter,
     },
     {
       id: "target",
-      Cell: ({row}) => (
-        <button 
+      Cell: ({ row }) => (
+        <button
           onClick={() => targetHandler(row.original)}
-          className="px-6 py-2 text-xs font-medium text-indigo-600 hover:text-indigo-700 tracking-wider cursor-pointer hover:bg-gray-200 rounded-lg uppercase"
+          className="px-6 py-2 text-xs font-medium text-indigo-600 hover:text-indigo-700 tracking-wider cursor-pointer hover:bg-gray-200 rounded-lg "
         >
           Target
         </button>
       ),
-      Filter: NoFilter
-    }
+      Filter: NoFilter,
+    },
   ])
 
   return (

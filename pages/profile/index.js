@@ -7,12 +7,11 @@ import { NoFilter } from "../../shared/utils/tableHelpers"
 import Table from "../../shared/components/Table"
 
 import { submittedPlansData } from "../../shared/data/submittedPlansData"
-
-const metrics = [
-  { name: "Currently Targeted", value: "$30,500", href: "/profile/currentlyTargeted" },
-  { name: "Removed Inventory", value: "$30,500", href: "/profile/removedInventory" },
-  { name: "Incoming Inventory", value: "$0", href: "/profile/incomingInventory" },
-]
+import { useSelector } from "react-redux"
+import { selectPlansByUserId } from "../../shared/redux/planSlice"
+import { selectTargets } from "../../shared/redux/inventorySlice"
+import { calcCurrentlyTargeted } from "../../shared/utils/metricsHelper"
+import { usdTwoDigits } from "../../shared/utils/currencyHelper"
 
 const requestData = [
   {
@@ -45,6 +44,27 @@ const requestData = [
 ]
 
 const profile = () => {
+  const user = useSelector((state) => state.users[0])
+  const plans = useSelector((state) => selectPlansByUserId(state, user?.id))
+
+  const metrics = [
+    {
+      name: "Currently Targeted",
+      value: usdTwoDigits(user?.targetedExt),
+      href: "/profile/currentlyTargeted",
+    },
+    {
+      name: "Removed Inventory",
+      value: usdTwoDigits(user?.removedExt),
+      href: "/profile/removedInventory",
+    },
+    {
+      name: "Incoming Inventory",
+      value: usdTwoDigits(user?.incomingExt),
+      href: "/profile/incomingInventory",
+    },
+  ]
+
   const columns = React.useMemo(() => [
     {
       Header: "ID",
@@ -61,7 +81,7 @@ const profile = () => {
     },
     {
       Header: "Date Submitted",
-      accessor: "date",
+      accessor: "dateSubmitted",
       Filter: NoFilter,
     },
     {
@@ -129,8 +149,8 @@ const profile = () => {
             <div className="p-4">
               <h4 className="text-2xl">Outgoing Requests</h4>
               <p className="text-gray-500 pt-2">
-                All submitted movement plans can be tracked in the Director's outgoing
-                request table.
+                All submitted movement plans can be tracked in the Director's
+                outgoing request table.
               </p>
             </div>
           </div>
@@ -138,11 +158,7 @@ const profile = () => {
           <div className="flex flex-col">
             <div className="overflow-x-auto bg-white rounded-lg">
               <div className="shadow border-b border-200 sm:rounded-lg">
-                <Table
-                  columns={columns}
-                  data={submittedPlansData}
-                  detailPath={"profile"}
-                />
+                <Table columns={columns} data={plans} detailPath={"profile"} />
               </div>
             </div>
           </div>

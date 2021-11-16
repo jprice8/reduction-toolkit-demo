@@ -3,15 +3,19 @@ import React from "react"
 
 import NavBar from "../../../shared/components/NavBar"
 import NoDetailTable from "../../../shared/components/NoDetailTable"
-import { targetData } from "../../../shared/data/targetData"
 import { submittedPlansData } from "../../../shared/data/submittedPlansData"
 import { NoFilter } from "../../../shared/utils/tableHelpers"
+import { useSelector } from "react-redux"
+import { selectTargetById } from "../../../shared/redux/inventorySlice"
+import { selectPlansByItemId } from "../../../shared/redux/planSlice"
 
 const ViewItemPlans = () => {
   const router = useRouter()
   const { itemId } = router.query
 
-  const item = targetData[itemId - 1]
+  const item = useSelector((state) => selectTargetById(state, itemId))
+  const plans = useSelector((state) => selectPlansByItemId(state, itemId))
+  console.log(plans?.length)
 
   const columns = [
     {
@@ -20,7 +24,7 @@ const ViewItemPlans = () => {
     },
     {
       Header: "Date Requested",
-      accessor: "date",
+      accessor: "dateSubmitted",
       Filter: NoFilter,
     },
     {
@@ -29,7 +33,7 @@ const ViewItemPlans = () => {
     },
     {
       Header: "Qty Requested",
-      accessor: "requestedQty",
+      accessor: "sendQty",
       Filter: NoFilter,
     },
     {
@@ -39,7 +43,7 @@ const ViewItemPlans = () => {
     },
     {
       Header: "LUOM Price",
-      accessor: "unitPrice",
+      accessor: "unitCost",
       Filter: NoFilter,
     },
     {
@@ -55,9 +59,9 @@ const ViewItemPlans = () => {
 
   return (
     <NavBar>
-      <div className="max-w-7xl mx-auto mt-10">
+      <div className="sm:max-w-7xl mx-auto mt-10">
         <div className="bg-white py-8 px-5 mb-10 rounded-lg shadow-lg">
-          <h3 className="text-3xl">{item.description}</h3>
+          <h3 className="text-3xl">{item?.description}</h3>
           <p className="text-gray-500 pt-1">
             The following are all movement plans that you have set for the
             respective item.
@@ -67,7 +71,7 @@ const ViewItemPlans = () => {
         <div className="flex flex-col">
           <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
             <div className="sm:rounded-lg">
-              <NoDetailTable columns={columns} data={submittedPlansData} />
+              <NoDetailTable columns={columns} data={plans ? plans : []} />
             </div>
           </div>
         </div>

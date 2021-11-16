@@ -1,5 +1,6 @@
 import React from "react"
 import { HiSearchCircle } from "react-icons/hi"
+import { usdTwoDigits } from "./currencyHelper"
 
 // Define a default UI for filtering
 export const DefaultColumnFilter = ({
@@ -69,5 +70,6 @@ export const checkIfFlagged = (val) => {
 }
 
 export const calculateExtCost = (row) => {
-  return row.unitCost * row.remaining
+  const formattedExt = row.unitCost * row.qtyRemaining
+  return usdTwoDigits(formattedExt)
 }
