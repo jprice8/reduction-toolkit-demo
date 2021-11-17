@@ -3,6 +3,7 @@ import { useSelector } from "react-redux"
 
 import NavBar from "../shared/components/NavBar"
 import NoDetailTable from "../shared/components/NoDetailTable"
+import { usdTwoDigits } from "../shared/utils/currencyHelper"
 import { NoFilter } from "../shared/utils/tableHelpers"
 
 const Leaderboard = () => {
@@ -39,7 +40,8 @@ const Leaderboard = () => {
       // Handle finalized
       existingUserHm.plansFinalized++
       // Handle reduced
-      existingUserHm.inventoryReduced += tmpPlan.acceptedExt
+      const ext = tmpPlan.unitCost * tmpPlan.sendQty
+      existingUserHm.inventoryReduced += ext
     }
   }
 
@@ -97,8 +99,8 @@ const Leaderboard = () => {
       Filter: NoFilter,
     },
     {
-      Header: "Inventory Reduced",
-      accessor: "extReduction",
+      Header: "$ Inventory Reduced",
+      accessor: row => usdTwoDigits(row.extReduction),
       Filter: NoFilter,
     },
   ])

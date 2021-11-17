@@ -21,14 +21,6 @@ const Search = () => {
     dispatch(
       toggleTarget({
         inventoryId: item.id,
-        isTarget: item.isTarget,
-      })
-    )
-
-    dispatch(
-      addTargetedExt({
-        userId: user.id,
-        ext: ext,
       })
     )
 
@@ -86,7 +78,7 @@ const Search = () => {
 
   return (
     <NavBar>
-      <div className="max-w-6xl mx-auto mt-10">
+      <div className="max-w-7xl mx-auto mt-10">
         <div className="bg-white py-10 px-5 mb-10 rounded-md shadow-md">
           <h3 className="text-3xl">Search Inventory</h3>
           <p className="text-gray-500 pt-2">Explain the search concept.</p>

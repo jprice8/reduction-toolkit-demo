@@ -2,25 +2,7 @@ import { createSlice, nanoid } from "@reduxjs/toolkit"
 
 import { createSelector } from "reselect"
 
-const initialState = [
-  {
-    id: nanoid(),
-    dateSubmitted: new Date().toISOString(),
-    inventoryId: "1a",
-    userId: "1a",
-    facilityName: "Baptist Hospital",
-    sendQty: 5,
-    decision: "system",
-    destination: "University Hospital",
-    unitCost: 100.0,
-    imms: "123456",
-    description: "BLADE",
-    status: "accepted",
-    acceptedQty: 5,
-    acceptedExt: 500.0,
-    isFinalized: false,
-  },
-]
+const initialState = []
 
 const planSlice = createSlice({
   name: "plan",
@@ -36,6 +18,7 @@ const planSlice = createSlice({
       const existingPlan = state.find((p) => p.id === planId)
       if (existingPlan) {
         existingPlan.isFinalized = true
+        existingPlan.status = 'accepted'
       }
     },
   },

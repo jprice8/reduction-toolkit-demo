@@ -5,7 +5,7 @@ export const calcCurrentlyTargeted = (inventory) => {
   for (let i = 0; i < inventory.length; i++) {
     const ext = inventory[i].unitCost * inventory[i].qtyRemaining
     // If the item is targeted, add the ext to removed
-    if (inventory[i].isTarget === true) {
+    if (inventory[i].isTarget === 'true') {
       targeted += ext
     }
   }

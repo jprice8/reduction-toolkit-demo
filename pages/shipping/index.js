@@ -18,7 +18,7 @@ const Shipping = () => {
     },
     {
       Header: "Description",
-      accessor: "description",
+      accessor: row => row.description.substring(0, 20),
     },
     {
       Header: "Shipped From",
@@ -30,12 +30,12 @@ const Shipping = () => {
     },
     {
       Header: "Date Shipped",
-      accessor: row => format(new Date(row.dateShipped), 'PPpp'),
+      accessor: row => format(new Date(row.dateShipped), 'PP'),
       Filter: NoFilter,
     },
     {
       Header: "Estimated Arrival",
-      accessor: row => format(new Date(row.estimatedArrival), 'PPpp'),
+      accessor: row => format(new Date(row.estimatedArrival), 'PP'),
       Filter: NoFilter,
     },
   ])

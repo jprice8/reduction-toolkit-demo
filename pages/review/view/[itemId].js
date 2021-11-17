@@ -4,10 +4,9 @@ import { format } from "date-fns"
 
 import NavBar from "../../../shared/components/NavBar"
 import NoDetailTable from "../../../shared/components/NoDetailTable"
-import { submittedPlansData } from "../../../shared/data/submittedPlansData"
-import { NoFilter } from "../../../shared/utils/tableHelpers"
+import { calculateExtCost, NoFilter } from "../../../shared/utils/tableHelpers"
 import { useSelector } from "react-redux"
-import { selectTargetById } from "../../../shared/redux/inventorySlice"
+import { selectInventoryById } from "../../../shared/redux/inventorySlice"
 import { selectPlansByItemId } from "../../../shared/redux/planSlice"
 import { usdTwoDigits } from "../../../shared/utils/currencyHelper"
 
@@ -15,9 +14,8 @@ const ViewItemPlans = () => {
   const router = useRouter()
   const { itemId } = router.query
 
-  const item = useSelector((state) => selectTargetById(state, itemId))
-  const plans = useSelector((state) => selectPlansByItemId(state, itemId))
-  console.log(plans?.length)
+  const item = useSelector((state) => selectInventoryById(state, parseInt(itemId)))
+  const plans = useSelector((state) => selectPlansByItemId(state, parseInt(itemId)))
 
   const columns = [
     {
@@ -39,18 +37,8 @@ const ViewItemPlans = () => {
       Filter: NoFilter,
     },
     {
-      Header: "Qty Accepted",
-      accessor: "acceptedQty",
-      Filter: NoFilter,
-    },
-    {
       Header: "LUOM Price",
       accessor: row => usdTwoDigits(row.unitCost),
-      Filter: NoFilter,
-    },
-    {
-      Header: "Accepted Ext Price",
-      accessor: row => usdTwoDigits(row.acceptedExt),
       Filter: NoFilter,
     },
     {
@@ -73,7 +61,7 @@ const ViewItemPlans = () => {
         <div className="flex flex-col">
           <div className="overflow-x-auto bg-white rounded-lg shadow-lg">
             <div className="sm:rounded-lg">
-              <NoDetailTable columns={columns} data={plans ? plans : []} />
+              <NoDetailTable columns={columns} data={plans} />
             </div>
           </div>
         </div>

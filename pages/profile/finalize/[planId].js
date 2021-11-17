@@ -22,13 +22,6 @@ const FinalizeForm = () => {
   const submitNonShippingHandler = () => {
     // Add to reduction ext
     if (planExt) {
-      dispatch(
-        addRemovedExt({
-          userId: user.id,
-          ext: planExt,
-        })
-      )
-
       // Finalize plan
       dispatch(
         finalizePlan({
@@ -58,7 +51,7 @@ const FinalizeForm = () => {
             <h3 className="text-lg leading-6 font-medium text-gray-900">
               Review Movement Plan
             </h3>
-            <div className="border p-5 mt-5 max-w-xl flex justify-between">
+            <div className="border p-5 mt-5 max-w-2xl flex justify-between">
               <div>
                 <h4 className="text-lg font-medium text-gray-900">
                   {plan?.description}
@@ -76,7 +69,7 @@ const FinalizeForm = () => {
               </div>
             </div>
 
-            <div className="border p-5 mt-5 mb-8 max-w-xl">
+            <div className="border p-5 mt-5 mb-8 max-w-2xl">
               <h4 className="font-semibold text-red-600">
                 Movement Total: {usdTwoDigits(planExt)}
               </h4>

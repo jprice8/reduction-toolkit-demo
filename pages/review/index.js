@@ -19,7 +19,7 @@ const Review = () => {
     },
     {
       Header: "Description",
-      accessor: "description",
+      accessor: row => row.description.substring(0, 20),
     },
     {
       Header: "IMMS #",

@@ -2,100 +2,104 @@ import { createSlice } from "@reduxjs/toolkit"
 
 import { createSelector } from "reselect"
 
-const initialState = [
-  {
-    id: "1a",
-    facilityName: "Baptist Hospital",
-    description: "BLADE",
-    imms: "123456",
-    qtyRemaining: 10,
-    unitCost: 100.0,
-    isTarget: true,
-    movementPlans: 1,
-    systemOutlook: [
-      {
-        facilityName: "Central Hospital",
-        countQty: 0,
-        poQty: 12,
-        issueQty: 0,
-      },
-      {
-        facilityName: "Methodist Hospital",
-        countQty: 0,
-        poQty: 24,
-        issueQty: 0,
-      },
-      {
-        facilityName: "University Hospital",
-        countQty: 0,
-        poQty: 0,
-        issueQty: 0,
-      },
-    ],
-  },
+import inventoryCount from "../../mockInventoryCount.json"
 
-  {
-    id: "2a",
-    facilityName: "Baptist Hospital",
-    description: "SCALPEL",
-    imms: "234567",
-    qtyRemaining: 5,
-    unitCost: 200.0,
-    isTarget: false,
-    movementPlans: 0,
-    systemOutlook: [
-      {
-        facilityName: "Central Hospital",
-        countQty: 20,
-        poQty: 100,
-        issueQty: 0,
-      },
-      {
-        facilityName: "Methodist Hospital",
-        countQty: 10,
-        poQty: 50,
-        issueQty: 0,
-      },
-      {
-        facilityName: "University Hospital",
-        countQty: 0,
-        poQty: 0,
-        issueQty: 0,
-      },
-    ],
-  },
+const initialState = inventoryCount
 
-  {
-    id: "3a",
-    facilityName: "Baptist Hospital",
-    description: "CATHETER",
-    imms: "345678",
-    qtyRemaining: 10,
-    unitCost: 200.0,
-    isTarget: true,
-    movementPlans: 0,
-    systemOutlook: [
-      {
-        facilityName: "Central Hospital",
-        countQty: 80,
-        poQty: 300,
-        issueQty: 0,
-      },
-      {
-        facilityName: "Methodist Hospital",
-        countQty: 40,
-        poQty: 150,
-        issueQty: 0,
-      },
-      {
-        facilityName: "University Hospital",
-        countQty: 20,
-        poQty: 80,
-        issueQty: 0,
-      },
-    ],
-  },
-]
+// const initialState = [
+//   {
+//     id: "1a",
+//     facilityName: "Baptist Hospital",
+//     description: "BLADE",
+//     imms: "123456",
+//     qtyRemaining: 10,
+//     unitCost: 100.0,
+//     isTarget: true,
+//     movementPlans: 1,
+//     systemOutlook: [
+//       {
+//         facilityName: "Central Hospital",
+//         countQty: 0,
+//         poQty: 12,
+//         issueQty: 0,
+//       },
+//       {
+//         facilityName: "Methodist Hospital",
+//         countQty: 0,
+//         poQty: 24,
+//         issueQty: 0,
+//       },
+//       {
+//         facilityName: "University Hospital",
+//         countQty: 0,
+//         poQty: 0,
+//         issueQty: 0,
+//       },
+//     ],
+//   },
+
+//   {
+//     id: "2a",
+//     facilityName: "Baptist Hospital",
+//     description: "SCALPEL",
+//     imms: "234567",
+//     qtyRemaining: 5,
+//     unitCost: 200.0,
+//     isTarget: false,
+//     movementPlans: 0,
+//     systemOutlook: [
+//       {
+//         facilityName: "Central Hospital",
+//         countQty: 20,
+//         poQty: 100,
+//         issueQty: 0,
+//       },
+//       {
+//         facilityName: "Methodist Hospital",
+//         countQty: 10,
+//         poQty: 50,
+//         issueQty: 0,
+//       },
+//       {
+//         facilityName: "University Hospital",
+//         countQty: 0,
+//         poQty: 0,
+//         issueQty: 0,
+//       },
+//     ],
+//   },
+
+//   {
+//     id: "3a",
+//     facilityName: "Baptist Hospital",
+//     description: "CATHETER",
+//     imms: "345678",
+//     qtyRemaining: 10,
+//     unitCost: 200.0,
+//     isTarget: true,
+//     movementPlans: 0,
+//     systemOutlook: [
+//       {
+//         facilityName: "Central Hospital",
+//         countQty: 80,
+//         poQty: 300,
+//         issueQty: 0,
+//       },
+//       {
+//         facilityName: "Methodist Hospital",
+//         countQty: 40,
+//         poQty: 150,
+//         issueQty: 0,
+//       },
+//       {
+//         facilityName: "University Hospital",
+//         countQty: 20,
+//         poQty: 80,
+//         issueQty: 0,
+//       },
+//     ],
+//   },
+// ]
 
 const inventorySlice = createSlice({
   name: "inventory",
@@ -118,10 +122,15 @@ const inventorySlice = createSlice({
       
     },
     toggleTarget(state, action) {
-      const { inventoryId, isTarget } = action.payload
+      const { inventoryId } = action.payload
       const existingInventory = state.find((i) => i.id === inventoryId)
       if (existingInventory) {
-        existingInventory.isTarget = !isTarget
+        // existingInventory.isTarget = !isTarget
+        if (existingInventory.isTarget === 'false') {
+          existingInventory.isTarget = 'true'
+        } else {
+          existingInventory.isTarget = 'false'
+        }
       }
     },
   },
@@ -130,15 +139,15 @@ const inventorySlice = createSlice({
 // Selectors
 export const selectNonTargets = createSelector(
   (state) => state.inventory,
-  (inv) => inv.filter((i) => i.isTarget === false)
+  (inv) => inv.filter((i) => i.isTarget === "false")
 )
 
 export const selectTargets = createSelector(
   (state) => state.inventory,
-  (inv) => inv.filter((i) => i.isTarget === true)
+  (inv) => inv.filter((i) => i.isTarget === "true")
 )
 
-export const selectTargetById = createSelector(
+export const selectInventoryById = createSelector(
   [(state) => state.inventory, (state, itemId) => itemId],
   (inventory, itemId) =>
     inventory.find((i) => (i.id) === itemId)

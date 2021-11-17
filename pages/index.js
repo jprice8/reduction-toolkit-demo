@@ -33,14 +33,16 @@ export default function Home() {
             inventory (inventory that can&quot;t be tracked through a digital
             system). This turns out to be an unwieldy task because of the sheer
             size of the inventory. There are several thousand SKUs (Store
-            Keeping Units) at each facility, so where do you even begin.
+            Keeping Units) at each facility, so where do you even begin?
           </p>
 
           <p>Thanks to experience, you can logically conclude the following:</p>
           <ul className="ml-6 list-disc">
             <li>
               The achilles heel to any supply chain is non-moving inventory, or
-              inventory that just sits in your warehouse and doesn&apos;t move.
+              inventory that just sits in your warehouse and doesn&apos;t move. All
+              physical inventory incurs a carrying cost. Which means the more inventory
+              you have on hand, the more you are spending to hold it.
             </li>
             <li>
               The 80/20 rule would have us believe that roughly 80% of the total
@@ -78,7 +80,7 @@ export default function Home() {
 
           <p>
             Click on the process link to read more on how the process of the app 
-            works. Click on the specs link if you like to read more on the 
+            works. Click on the specs link if you would like to read more on the 
             technical specifications of the web app.
           </p>
 

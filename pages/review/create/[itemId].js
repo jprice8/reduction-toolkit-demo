@@ -7,7 +7,7 @@ import ErrorModal from "../../../shared/components/ErrorModal"
 import NavBar from "../../../shared/components/NavBar"
 import NoDetailTable from "../../../shared/components/NoDetailTable"
 import { NoFilter } from "../../../shared/utils/tableHelpers"
-import { selectTargetById, addMovementPlan } from "../../../shared/redux/inventorySlice"
+import { addMovementPlan, selectInventoryById } from "../../../shared/redux/inventorySlice"
 import toast from "react-hot-toast"
 import { planAdded } from "../../../shared/redux/planSlice"
 import { nanoid } from "@reduxjs/toolkit"
@@ -16,7 +16,6 @@ const CreateItemPlan = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     control,
     formState: { errors },
   } = useForm()
@@ -26,8 +25,30 @@ const CreateItemPlan = () => {
 
   const dispatch = useDispatch()
   const user = useSelector((state) => state.users[0])
-  const item = useSelector((state) => selectTargetById(state, itemId))
-  const systemData = item?.systemOutlook
+  const item = useSelector((state) => selectInventoryById(state, parseInt(itemId)))
+  const systemData = []
+
+  for (let i = 0; i < 3; i++) {
+    let tmpObject = {}
+    if (i === 0) {
+      tmpObject['facilityName'] = 'Central Hospital'
+      tmpObject['countQty'] = item.centralCount
+      tmpObject['poQty'] = item.centralPo
+      tmpObject['issueQty'] = item.centralIssue
+    } else if (i === 1) {
+      tmpObject['facilityName'] = 'Methodist Hospital'
+      tmpObject['countQty'] = item.methodistCount
+      tmpObject['poQty'] = item.methodistPo
+      tmpObject['issueQty'] = item.methodistIssue
+    } else if (i === 2) {
+      tmpObject['facilityName'] = 'University Hospital'
+      tmpObject['countQty'] = item.universityCount
+      tmpObject['poQty'] = item.universityPo
+      tmpObject['issueQty'] = item.universityIssue
+    }
+
+    systemData.push(tmpObject)
+  }
 
   // Handle cancel button
   const onCancel = () => {
@@ -54,7 +75,7 @@ const CreateItemPlan = () => {
       planAdded({
         id: nanoid(),
         dateSubmitted: new Date().toISOString(),
-        inventoryId: itemId,
+        inventoryId: parseInt(itemId),
         userId: user.id,
         facilityName: item.facilityName,
         sendQty: parseInt(data.quantity),
@@ -72,7 +93,7 @@ const CreateItemPlan = () => {
 
     dispatch(
       addMovementPlan({
-        inventoryId: itemId,
+        inventoryId: parseInt(itemId),
         sendQty: parseInt(data.quantity),
       })
     )
@@ -128,7 +149,7 @@ const CreateItemPlan = () => {
                 <div>
                   <NoDetailTable
                     columns={columns}
-                    data={systemData ? systemData : []}
+                    data={systemData}
                   />
                 </div>
               </div>
