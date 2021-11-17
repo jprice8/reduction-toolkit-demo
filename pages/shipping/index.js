@@ -45,7 +45,7 @@ const Shipping = () => {
       <div className="max-w-7xl mx-auto mt-10">
         <div className="bg-white py-10 px-5 mb-10 rounded-md shadow-md">
           <h3 className="text-3xl">Shipping Dashboard</h3>
-          <p className="text-gray-500 pt-2">The shipping dashboard lets you track items you have shipped to other facilities.</p>
+          <p className="text-gray-500 pt-2">The shipping dashboard lets you track items that you have shipped to other facilities.</p>
         </div>
 
         <div className="flex flex-col">

@@ -81,7 +81,7 @@ const Search = () => {
           <h3 className="text-3xl">Search Inventory</h3>
           <p className="text-gray-500 pt-2">
             The Search page displays your non-stock inventory and allows you to
-            target items you would like to reduce. As explained on the Readme
+            target items that you would like to reduce. As explained on the Readme
             page, this list is comprised of your top 200 non-moving SKUs ordered
             by extended cost. Click the "Target" button to the right of an item
             to target it. Continue to the "Review" page once you are finished.

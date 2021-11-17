@@ -14,17 +14,27 @@ const Specs = () => {
           </h2>
 
           <p className="py-5">
-            The version of this app that is used in production uses a monolithic Django 
-            app which communicates with a managed PostgreSQL cluster on AWS. The
-            Django app itself is run in an EC2 instance on AWS and serves its
-            Django templates to HTTP requests via a NGINX reverse proxy. 
+            The version of this app that is used in production uses a monolithic
+            Django app which communicates with a managed PostgreSQL cluster on
+            AWS. The Django app itself is run in an EC2 instance on AWS and
+            serves its Django templates to HTTP requests via a NGINX reverse
+            proxy.
           </p>
 
           <p className="pb-5">
-            The demo you are using does not communicate to the backend Django app and
-            is instead running as a NextJS app hosted on Vercel. The data is managed
-            using Redux as a client side data store. So if you want to restart, just 
-            refresh the page and start over.
+            The demo you are using does not communicate to the backend Django
+            app and is instead running as a NextJS app hosted on Vercel. The
+            data is managed using Redux as a client side data store. So if you
+            want to restart, just refresh the page and start over.
+          </p>
+
+          <p className="pb-5">
+            The source code to the demo app can be found{" "}
+            <a 
+              href="https://github.com/jprice8/reduction-toolkit-demo"
+              className="text-indigo-500 hover:text-indigo-700"
+            >here</a>
+            .
           </p>
 
           <div className="flex justify-evenly">
