@@ -62,7 +62,7 @@ export default function Home() {
 
           <p>
             Even though you now have a list of the items that you should be
-            targeting, you still don't have a way to manage the process. You
+            targeting, you still don&apos;t have a way to manage the process. You
             could use a spreadsheet, but after several cycles of this process
             that spreadsheet would grow far too big. Plus, your hospital is in a
             system with several other facilities who are also doing the same
