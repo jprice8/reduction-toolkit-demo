@@ -68,7 +68,7 @@ export default function Home() {
             system with several other facilities who are also doing the same
             thing. After several cycles of all the directors sending
             spreadsheets around labled, &quot;COPY OF COPY OF COPY OF Inventory
-            Review FINAL 16&quot;, you quickly find yourself in spreadsheet
+            Review FINAL v6&quot;, you quickly find yourself in spreadsheet
             hell.
           </p>
 
