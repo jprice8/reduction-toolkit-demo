@@ -4,7 +4,7 @@ import { format } from "date-fns"
 
 import NavBar from "../../../shared/components/NavBar"
 import NoDetailTable from "../../../shared/components/NoDetailTable"
-import { calculateExtCost, NoFilter } from "../../../shared/utils/tableHelpers"
+import { NoFilter } from "../../../shared/utils/tableHelpers"
 import { useSelector } from "react-redux"
 import { selectInventoryById } from "../../../shared/redux/inventorySlice"
 import { selectPlansByItemId } from "../../../shared/redux/planSlice"
@@ -52,7 +52,7 @@ const ViewItemPlans = () => {
       <div className="sm:max-w-7xl mx-auto mt-10">
         <div className="bg-white py-8 px-5 mb-10 rounded-lg shadow-lg">
           <h3 className="text-3xl">{item?.description}</h3>
-          <p className="text-gray-500 pt-1">
+          <p className="text-gray-500 pt-2">
             The following are all movement plans that you have set for the
             respective item.
           </p>

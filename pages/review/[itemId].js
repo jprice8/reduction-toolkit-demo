@@ -7,18 +7,18 @@ import { useDispatch } from "react-redux"
 import NavBar from "../../shared/components/NavBar"
 import { useSelector } from "react-redux"
 import { selectInventoryById } from "../../shared/redux/inventorySlice"
-import { usdTwoDigits } from "../../shared/utils/currencyHelper"
 import { selectPlansByItemId } from "../../shared/redux/planSlice"
 import { toggleTarget } from "../../shared/redux/inventorySlice"
 import toast from "react-hot-toast"
-import { removeTargetedExt } from "../../shared/redux/usersSlice"
 
 const ReviewDetail = () => {
   const router = useRouter()
   const { itemId } = router.query
   const dispatch = useDispatch()
 
-  const item = useSelector((state) => selectInventoryById(state, parseInt(itemId)))
+  const item = useSelector((state) =>
+    selectInventoryById(state, parseInt(itemId))
+  )
   const plans = useSelector((state) => selectPlansByItemId(state, item?.id))
   const user = useSelector((state) => state.users[0])
 
@@ -27,18 +27,10 @@ const ReviewDetail = () => {
   }
 
   const unTargetHandler = () => {
-    const ext = item.unitCost * item.qtyRemaining
-
     dispatch(
       toggleTarget({
         inventoryId: parseInt(itemId),
-      })
-    )
-
-    dispatch(
-      removeTargetedExt({
-        userId: user.id,
-        ext: ext,
+        isTarget: item.isTarget,
       })
     )
 
@@ -51,8 +43,16 @@ const ReviewDetail = () => {
       <div className="max-w-5xl mx-auto mt-10">
         <div className="bg-white p-10 rounded-md shadow-md">
           <h2 className="text-4xl">Review Target Item</h2>
-          <p className="text-gray-500 pt-1">
-            Create or view movement plans for this item
+          <ul className="ml-6 list-disc text-gray-500 pt-2">
+            <li>
+              Click "Create Plan" to create a movement plan for this item.
+            </li>
+            <li>Click "View Plans" to see all movement plans that you have created for this item.</li>
+            <li>Click "UnTarget" to remove this item from the "Review" page and move it back to the "Search" page.</li>
+          </ul>
+
+          <p className="text-gray-500 pt-2">
+            After creating a movement plan, go to the "Profile" page to finalize and manage your movement plan.
           </p>
         </div>
 

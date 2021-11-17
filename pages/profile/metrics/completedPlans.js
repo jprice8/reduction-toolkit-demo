@@ -51,7 +51,7 @@ const CompletedPlans = () => {
   return (
     <NavBar>
       <div className="max-w-7xl mx-auto mt-10">
-        <div className="bg-white py-10 px-5 mb-10 rounded-md shadow-md">
+        <div className="bg-white p-10 mb-10 rounded-md shadow-md">
           <h3 className="text-3xl">Review Completed Plans</h3>
           <p className="text-gray-500 pt-1">
             Movement plans that are finalized can be reviewed and exported from
@@ -60,7 +60,7 @@ const CompletedPlans = () => {
         </div>
 
         <div className="mt-5">
-          <div className="bg-white p-5 shadow-md rounded-md mb-5">
+          <div className="bg-white p-10 shadow-md rounded-md mb-5">
             <button
               type="button"
               className="items-center flex border border-gray-500 hover:bg-gray-500 hover:shadow-md px-2 py-2 rounded-md"

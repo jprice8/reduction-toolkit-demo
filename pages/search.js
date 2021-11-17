@@ -8,23 +8,21 @@ import NavBar from "../shared/components/NavBar"
 import NoDetailTable from "../shared/components/NoDetailTable"
 import { calculateExtCost } from "../shared/utils/tableHelpers"
 import { selectNonTargets, toggleTarget } from "../shared/redux/inventorySlice"
-import { addTargetedExt } from "../shared/redux/usersSlice"
 
 const Search = () => {
   const dispatch = useDispatch()
   const nonTargets = useSelector(selectNonTargets)
-  const user = useSelector((state) => state.users[0])
 
   const targetHandler = (item) => {
-    const ext = item.unitCost * item.qtyRemaining
-
+    // Toggle inventory item's isTarget property in redux
     dispatch(
       toggleTarget({
         inventoryId: item.id,
+        isTaget: item.isTarget,
       })
     )
 
-    toast.success(`Item ${item.imms} targeted!`)
+    toast.success(`Item targeted!`)
   }
 
   const columns = React.useMemo(() => [
@@ -35,7 +33,7 @@ const Search = () => {
     },
     {
       Header: "Description",
-      accessor: "description",
+      accessor: (row) => row.description.substring(0, 20) + "...",
     },
     {
       Header: "IMMS #",
@@ -81,7 +79,13 @@ const Search = () => {
       <div className="max-w-7xl mx-auto mt-10">
         <div className="bg-white py-10 px-5 mb-10 rounded-md shadow-md">
           <h3 className="text-3xl">Search Inventory</h3>
-          <p className="text-gray-500 pt-2">Explain the search concept.</p>
+          <p className="text-gray-500 pt-2">
+            The Search page displays your non-stock inventory and allows you to
+            target items you would like to reduce. As explained on the Readme
+            page, this list is comprised of your top 200 non-moving SKUs ordered
+            by extended cost. Click the "Target" button to the right of an item
+            to target it. Continue to the "Review" page once you are finished.
+          </p>
         </div>
 
         <div className="flex flex-col">

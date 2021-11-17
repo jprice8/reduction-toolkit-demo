@@ -4,7 +4,6 @@ import {
   usePagination,
   useRowSelect,
   useFilters,
-  useSortBy,
 } from "react-table"
 import Link from "next/link"
 import {
@@ -13,7 +12,6 @@ import {
   HiChevronDoubleRight,
   HiChevronRight,
 } from "react-icons/hi"
-import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti"
 
 import { DefaultColumnFilter } from "../utils/tableHelpers"
 
@@ -70,7 +68,6 @@ const Table = ({
       initialState: { pageSize: 10 },
     },
     useFilters,
-    useSortBy,
     usePagination,
     useRowSelect,
     (hooks) => {
@@ -105,21 +102,7 @@ const Table = ({
                   {...column.getHeaderProps()}
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  <div>
-                    <span {...column.getSortByToggleProps()}>
-                      {column.render("Header")}
-                      {/* Add a sort direction indicator */}
-                      {column.isSorted ? (
-                        column.isSortedDesc ? (
-                          <TiArrowSortedDown />
-                        ) : (
-                          <TiArrowSortedUp />
-                        )
-                      ) : (
-                        ""
-                      )}
-                    </span>
-                  </div>
+                  {column.render("Header")}
                   {/* Render the columns filter UI */}
                   <div>{column.canFilter ? column.render("Filter") : null}</div>
                 </th>

@@ -62,7 +62,7 @@ const profile = () => {
     },
     {
       Header: "Description",
-      accessor: row => row.description.substring(0, 20),
+      accessor: row => row.description.substring(0, 20) + '...',
     },
     {
       Header: "IMMS #",
@@ -80,7 +80,7 @@ const profile = () => {
         {/* Welcome Banner */}
         <div className="bg-logoSecond">
           <div className="max-w-7xl mx-auto py-10">
-            <div className="text-gray-700">
+            <div className="text-gray-600">
               <h2 className="text-3xl pb-2">{user.userFirstName} {user.userLastName}</h2>
               <div className="flex">
                 <FaHospital className="h-6 w-6" />
@@ -93,7 +93,7 @@ const profile = () => {
               {metrics.map((item) => (
                 <div
                   key={item.name}
-                  className="relative mt-5 px-4 pb-10 pt-5 bg-white rounded-lg shadow"
+                  className="relative mt-5 pl-4 pb-10 pt-5 bg-white rounded-lg shadow"
                 >
                   <p className="text-lg text-gray-500 font-semibold">
                     {item.name}
@@ -126,7 +126,7 @@ const profile = () => {
               <h4 className="text-2xl">Outgoing Requests</h4>
               <p className="text-gray-500 pt-2">
                 All submitted movement plans can be tracked in the Director's
-                outgoing request table.
+                outgoing request table below.
               </p>
             </div>
           </div>

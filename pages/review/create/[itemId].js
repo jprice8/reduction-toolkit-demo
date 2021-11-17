@@ -7,7 +7,10 @@ import ErrorModal from "../../../shared/components/ErrorModal"
 import NavBar from "../../../shared/components/NavBar"
 import NoDetailTable from "../../../shared/components/NoDetailTable"
 import { NoFilter } from "../../../shared/utils/tableHelpers"
-import { addMovementPlan, selectInventoryById } from "../../../shared/redux/inventorySlice"
+import {
+  addMovementPlan,
+  selectInventoryById,
+} from "../../../shared/redux/inventorySlice"
 import toast from "react-hot-toast"
 import { planAdded } from "../../../shared/redux/planSlice"
 import { nanoid } from "@reduxjs/toolkit"
@@ -25,34 +28,31 @@ const CreateItemPlan = () => {
 
   const dispatch = useDispatch()
   const user = useSelector((state) => state.users[0])
-  const item = useSelector((state) => selectInventoryById(state, parseInt(itemId)))
+  const item = useSelector((state) =>
+    selectInventoryById(state, parseInt(itemId))
+  )
   const systemData = []
 
   for (let i = 0; i < 3; i++) {
     let tmpObject = {}
     if (i === 0) {
-      tmpObject['facilityName'] = 'Central Hospital'
-      tmpObject['countQty'] = item.centralCount
-      tmpObject['poQty'] = item.centralPo
-      tmpObject['issueQty'] = item.centralIssue
+      tmpObject["facilityName"] = "Central Hospital"
+      tmpObject["countQty"] = item.centralCount
+      tmpObject["poQty"] = item.centralPo
+      tmpObject["issueQty"] = item.centralIssue
     } else if (i === 1) {
-      tmpObject['facilityName'] = 'Methodist Hospital'
-      tmpObject['countQty'] = item.methodistCount
-      tmpObject['poQty'] = item.methodistPo
-      tmpObject['issueQty'] = item.methodistIssue
+      tmpObject["facilityName"] = "Methodist Hospital"
+      tmpObject["countQty"] = item.methodistCount
+      tmpObject["poQty"] = item.methodistPo
+      tmpObject["issueQty"] = item.methodistIssue
     } else if (i === 2) {
-      tmpObject['facilityName'] = 'University Hospital'
-      tmpObject['countQty'] = item.universityCount
-      tmpObject['poQty'] = item.universityPo
-      tmpObject['issueQty'] = item.universityIssue
+      tmpObject["facilityName"] = "University Hospital"
+      tmpObject["countQty"] = item.universityCount
+      tmpObject["poQty"] = item.universityPo
+      tmpObject["issueQty"] = item.universityIssue
     }
 
     systemData.push(tmpObject)
-  }
-
-  // Handle cancel button
-  const onCancel = () => {
-    router.push(`/review/${itemId}`)
   }
 
   // Set up a watch for decison. Destination should only render
@@ -70,6 +70,9 @@ const CreateItemPlan = () => {
       data.destination = "other"
     }
 
+    // Calc send ext
+    const sendExt = item.unitCost * data.quantity
+
     // Dispatch redux reducer to add movement plan to store
     dispatch(
       planAdded({
@@ -79,15 +82,14 @@ const CreateItemPlan = () => {
         userId: user.id,
         facilityName: item.facilityName,
         sendQty: parseInt(data.quantity),
+        sendExt: sendExt,
         decision: data.decision,
         destination: data.destination,
         unitCost: item.unitCost,
         imms: item.imms,
         description: item.description,
-        status: "outstanding",
-        acceptedQty: 0,
-        acceptedExt: 0,
-        isFinalized: false
+        status: "accepted",
+        isFinalized: false,
       })
     )
 
@@ -127,15 +129,28 @@ const CreateItemPlan = () => {
   return (
     <NavBar>
       <div className="max-w-6xl mx-auto mt-10">
-        <div className="bg-white p-5 shadow-md rounded-md">
+        <div className="bg-white p-10 shadow-md rounded-md">
           <h2 className="text-5xl">Set Movement Plan</h2>
-          <p className="text-gray-500 pt-1">
-            What would you like to do with this item?
+          <p className="text-gray-500 pt-2">
+            How would you like to reduce this item? Methods of removal should be
+            prioritized as follows:
+          </p>
+          <ul className="list-disc pl-6 text-gray-500 pt-2">
+            <li>Move the item to a facility within the system</li>
+            <li>Sell the item to a third party vendor</li>
+            <li>Discard the item</li>
+          </ul>
+
+          <p className="text-gray-500 pt-2">
+            You can see how much of the item each facility is using in the
+            "System Outlook" table below. The table shows you how much of the
+            item each facility has purchased directly and been issued from the
+            warehouse in the past 365 days.
           </p>
         </div>
 
         <div className="mt-5">
-          <div className="bg-white p-5 shadow-md rounded-md mb-5">
+          <div className="bg-white p-10 shadow-md rounded-md mb-5">
             <div>
               <h3 className="text-lg leading-6 font-medium text-gray-900">
                 System Outlook
@@ -147,16 +162,13 @@ const CreateItemPlan = () => {
             <div className="mt-4">
               <div>
                 <div>
-                  <NoDetailTable
-                    columns={columns}
-                    data={systemData}
-                  />
+                  <NoDetailTable columns={columns} data={systemData} />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-5 shadow-md rounded-md">
+          <div className="bg-white p-10 shadow-md rounded-md">
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="space-y-8 divide-y divide-gray-200 sm:space-y-5"
@@ -307,13 +319,6 @@ const CreateItemPlan = () => {
 
                     <div className="pt-5 sm:border-t sm:border-gray-200 sm:pt-5">
                       <div className="flex justify-end">
-                        <button
-                          type="button"
-                          onClick={onCancel}
-                          className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                          Cancel
-                        </button>
                         <button
                           type="submit"
                           className="ml-3 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
