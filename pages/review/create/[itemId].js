@@ -2,6 +2,8 @@ import React from "react"
 import { useRouter } from "next/router"
 import { useForm, useWatch } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux"
+import { nanoid } from "@reduxjs/toolkit"
+import toast from "react-hot-toast"
 
 import ErrorModal from "../../../shared/components/ErrorModal"
 import NavBar from "../../../shared/components/NavBar"
@@ -11,9 +13,8 @@ import {
   addMovementPlan,
   selectInventoryById,
 } from "../../../shared/redux/inventorySlice"
-import toast from "react-hot-toast"
 import { planAdded } from "../../../shared/redux/planSlice"
-import { nanoid } from "@reduxjs/toolkit"
+import PageNotFound from "../../../shared/components/PageNotFound"
 
 const CreateItemPlan = () => {
   const {
@@ -31,6 +32,12 @@ const CreateItemPlan = () => {
   const item = useSelector((state) =>
     selectInventoryById(state, parseInt(itemId))
   )
+
+  // If bad itemId supplied in URL, return 404
+  if (!item) {
+    return <PageNotFound />
+  }
+
   const systemData = []
 
   for (let i = 0; i < 3; i++) {

@@ -3,12 +3,18 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import NavBar from '../../shared/components/NavBar'
+import PageNotFound from '../../shared/components/PageNotFound'
 import { selectShippingById } from '../../shared/redux/shippingSlice'
 
 const ShippingDetail = () => {
   const router = useRouter()
   const { shippingId } = router.query
   const shipping = useSelector((state) => selectShippingById(state, shippingId))
+
+  if (!shipping) {
+    return <PageNotFound />
+  }
+
   const formattedShipDate = format(new Date(shipping?.dateShipped), 'PPPpp')
   const formattedArrivalDate = format(new Date(shipping?.dateShipped), 'MMMM d')
 

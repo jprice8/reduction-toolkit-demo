@@ -7,6 +7,7 @@ import format from "date-fns/format"
 import NavBar from "../../shared/components/NavBar"
 import { notifyApiDisabled } from "../../shared/utils/toastHelpers"
 import { selectPlanById } from "../../shared/redux/planSlice"
+import PageNotFound from "../../shared/components/PageNotFound"
 
 const PlanDetail = () => {
   const router = useRouter()
@@ -16,6 +17,10 @@ const PlanDetail = () => {
 
   const markFinalHandler = () => {
     router.push(`/profile/finalize/${planId}`)
+  }
+
+  if (!plan) {
+    return <PageNotFound />
   }
 
   return (
