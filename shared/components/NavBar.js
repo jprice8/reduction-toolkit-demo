@@ -1,5 +1,6 @@
 import React from "react"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import {
   FaClipboardCheck,
   FaCog,
@@ -10,6 +11,7 @@ import {
 } from "react-icons/fa"
 
 import Header from "./Header"
+import { classNames } from "../utils/navHelpers"
 
 const navigation = [
   { name: "Profile", href: "/profile", icon: FaUser },
@@ -21,6 +23,13 @@ const navigation = [
 ]
 
 const NavBar = ({ children }) => {
+  const router = useRouter()
+
+  // Check whether link is hot for highlight
+  const isLinkHot = (item) => {
+    return router.pathname === item.href
+  }
+
   return (
     <React.Fragment>
       {/* Header */}
@@ -41,7 +50,14 @@ const NavBar = ({ children }) => {
           <nav className="hidden md:block bg-white">
             {navigation.map((item) => (
               <Link key={item.name} href={item.href}>
-                <div className="flex px-10 py-5 cursor-pointer text-linkMain hover:bg-linkHover transition duration-200">
+                <div 
+                  className={classNames(
+                    isLinkHot(item) 
+                    ? "bg-gray-200"
+                    : "",
+                    "flex px-10 py-5 cursor-pointer text-linkMain hover:bg-linkHover transition duration-200"
+                  )}
+                >
                   <item.icon className="mr-4 flex-shrink-0 h-6 w-6 text-linkMain" />
                   <p>{item.name}</p>
                 </div>

@@ -35,7 +35,7 @@ const Leaderboard = () => {
     // Handle submitted
     existingUserHm.plansSubmitted++
 
-    if (tmpPlan.status === "accepted") {
+    if (tmpPlan.isFinalized === true) {
       // Handle finalized
       existingUserHm.plansFinalized++
       // Handle reduced
@@ -105,13 +105,13 @@ const Leaderboard = () => {
   return (
     <NavBar>
       <div className="max-w-5xl mx-auto mt-10">
-        <div className="bg-white py-10 px-5 mb-10 rounded-lg">
+        <div className="bg-white py-10 px-5 mb-10 rounded-md shadow-md">
           <h3 className="text-3xl">Leaderboard</h3>
           <p className="text-gray-500 pt-2">The leaderboard shows up-to-date metrics on how each facility is performing in inventory reduction.</p>
         </div>
 
         <div className="flex flex-col">
-          <div className="overflow-x-auto bg-white rounded-lg">
+          <div className="overflow-x-auto bg-white rounded-md shadow-md">
             <div className="shadow sm:rounded-lg">
               <NoDetailTable columns={columns} data={leaderboardData} />
             </div>

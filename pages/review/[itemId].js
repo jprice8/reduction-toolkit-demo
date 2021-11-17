@@ -58,7 +58,7 @@ const ReviewDetail = () => {
           </p>
         </div>
 
-        <div className="mt-5 bg-white flex justify-between p-10 rounded-md">
+        <div className="mt-5 bg-white flex justify-between p-10 rounded-md shadow-md">
           <div className="border p-5 space-y-2 text-gray-900">
             <h3 className="text-2xl">{item?.description}</h3>
             <div className="font-light space-y-2">

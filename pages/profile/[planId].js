@@ -5,7 +5,6 @@ import { FaCheck, FaEdit, FaPaperPlane, FaTrash } from "react-icons/fa"
 import format from "date-fns/format"
 
 import NavBar from "../../shared/components/NavBar"
-import { submittedPlansData } from "../../shared/data/submittedPlansData"
 import { notifyApiDisabled } from "../../shared/utils/toastHelpers"
 import { selectPlanById } from "../../shared/redux/planSlice"
 
@@ -34,13 +33,13 @@ const PlanDetail = () => {
           <div className="border p-5 space-y-2 text-gray-900">
             <h3 className="text-2xl">{plan?.description}</h3>
             <div className="font-light space-y-2">
-            <p className="">IMMS # {plan?.imms}</p>
-            <p>Reduction Method is {plan?.decision}</p>
-            <p>Seeking to send {plan?.sendQty} units</p>
-            <p>Result is {plan?.status}</p>
-            {plan?.status === "accepted" && (
-              <p>Receiving director accepted {plan?.acceptedQty} units</p>
-            )}
+              <p className="">IMMS # {plan?.imms}</p>
+              <p>Reduction Method is {plan?.decision}</p>
+              <p>Seeking to send {plan?.sendQty} units</p>
+              <p>Result is {plan?.status}</p>
+              {plan?.status === "accepted" && (
+                <p>Receiving director accepted {plan?.acceptedQty} units</p>
+              )}
             </div>
           </div>
 

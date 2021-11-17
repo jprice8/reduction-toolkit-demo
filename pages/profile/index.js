@@ -7,8 +7,7 @@ import { NoFilter } from "../../shared/utils/tableHelpers"
 import Table from "../../shared/components/Table"
 
 import { useSelector } from "react-redux"
-import { selectPlansByUserId } from "../../shared/redux/planSlice"
-import { selectTargets } from "../../shared/redux/inventorySlice"
+import { selectNonCompletedUserPlans, selectPlansByUserId } from "../../shared/redux/planSlice"
 import { calcCurrentlyTargeted, calcPlansCompleted, calcRemovedInventory } from "../../shared/utils/metricsHelper"
 import { usdTwoDigits } from "../../shared/utils/currencyHelper"
 import { format } from "date-fns"
@@ -18,6 +17,7 @@ const profile = () => {
   const user = useSelector((state) => state.users[0])
   const plans = useSelector((state) => selectPlansByUserId(state, user?.id))
   const inventory = useSelector((state) => state.inventory)
+  const nonCompletedPlans = useSelector((state) => selectNonCompletedUserPlans(state, user?.id))
 
   const targetedExt = calcCurrentlyTargeted(inventory)
   const removedExt = calcRemovedInventory(plans)
@@ -27,17 +27,17 @@ const profile = () => {
     {
       name: "Currently Targeted",
       value: usdTwoDigits(targetedExt),
-      href: "/profile/currentlyTargeted",
+      href: "/profile/metrics/currentlyTargeted",
     },
     {
       name: "Removed Inventory",
       value: usdTwoDigits(removedExt),
-      href: "/profile/completedPlans",
+      href: "/profile/metrics/completedPlans",
     },
     {
       name: "Plans Completed",
       value: completedPlans,
-      href: "/profile/completedPlans",
+      href: "/profile/metrics/completedPlans",
     },
   ]
 
@@ -78,18 +78,18 @@ const profile = () => {
     <NavBar>
       <div>
         {/* Welcome Banner */}
-        <div className="bg-bannerBackground">
+        <div className="bg-logoSecond">
           <div className="max-w-7xl mx-auto py-10">
-            <div className="text-white">
-              <h2 className="text-3xl pb-2">Alex Bradford</h2>
+            <div className="text-gray-700">
+              <h2 className="text-3xl pb-2">{user.userFirstName} {user.userLastName}</h2>
               <div className="flex">
                 <FaHospital className="h-6 w-6" />
-                <h3 className="pl-2 text-lg">North Central Baptist Hospital</h3>
+                <h3 className="pl-2 text-lg">{user.facility}</h3>
               </div>
             </div>
             {/* Metrics */}
 
-            <div className="border-t mt-5 border-gray-600 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="border-t mt-5 border-gray-300 grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {metrics.map((item) => (
                 <div
                   key={item.name}
@@ -121,7 +121,7 @@ const profile = () => {
 
         {/* Outgoing Requests */}
         <div className="max-w-7xl mx-auto">
-          <div className="my-10 rounded-lg bg-white">
+          <div className="my-10 rounded-md shadow-md bg-white">
             <div className="p-4">
               <h4 className="text-2xl">Outgoing Requests</h4>
               <p className="text-gray-500 pt-2">
@@ -132,9 +132,9 @@ const profile = () => {
           </div>
 
           <div className="flex flex-col">
-            <div className="overflow-x-auto bg-white rounded-lg">
+            <div className="overflow-x-auto bg-white rounded-md shadow-md">
               <div className="shadow border-b border-200 sm:rounded-lg">
-                <Table columns={columns} data={plans} detailPath={"profile"} />
+                <Table columns={columns} data={nonCompletedPlans} detailPath={"profile"} />
               </div>
             </div>
           </div>
