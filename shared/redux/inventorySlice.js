@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit"
 
 import { createSelector } from "reselect"
 
-import inventoryCount from "../data/mockInventoryCount2.json"
+import { mockData } from "../utils/mockData"
 
-const initialState = inventoryCount
+const initialState = mockData
 
 const inventorySlice = createSlice({
   name: "inventory",

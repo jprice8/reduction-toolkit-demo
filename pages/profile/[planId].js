@@ -13,7 +13,6 @@ const PlanDetail = () => {
   const { planId } = router.query
 
   const plan = useSelector((state) => selectPlanById(state, planId))
-  console.log(plan)
 
   const markFinalHandler = () => {
     router.push(`/profile/finalize/${planId}`)
