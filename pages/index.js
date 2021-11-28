@@ -30,7 +30,7 @@ export default function Home() {
             The scenario that this demo app portrays is the following. You are a
             supply chain director for a local hospital. Your health system is
             trying to reduce excess and non-moving inventory from its non-stock
-            inventory (inventory that can&quot;t be tracked through a digital
+            inventory (inventory that can&apos;t be tracked through a digital
             system). This turns out to be an unwieldy task because of the sheer
             size of the inventory. There are several thousand SKUs (Store
             Keeping Units) at each facility, so where do you even begin?
@@ -39,7 +39,7 @@ export default function Home() {
           <p>Thanks to experience, you can logically conclude the following:</p>
           <ul className="ml-6 list-disc">
             <li>
-              The achilles heel to any supply chain is non-moving inventory, or
+              The Achilles&apos; heel to any supply chain is non-moving inventory, or
               inventory that just sits in your warehouse and doesn&apos;t move. All
               physical inventory incurs a carrying cost. Which means the more inventory
               you have on hand, the more you are spending to hold it.
